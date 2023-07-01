@@ -20,7 +20,10 @@ public class StudentDataRepository implements StudentDataMethodHandler {
 
     @Override
     public void getStudentList() {
-        System.out.println(toString());
+        for (Student student : studentList) {
+            System.out.println("(Student: " + student.getIme() + " Surname: " + student.getSurname() +
+                    ", College: " + student.getCollege() + ")");
+        }
     }
 
     @Override
@@ -41,10 +44,5 @@ public class StudentDataRepository implements StudentDataMethodHandler {
     	return studentList;
     }
 
-    @Override
-    public String toString() {
-        return "StudentDataRepository{" +
-                "studentList=" + studentList +
-                '}';
-    }
+
 }

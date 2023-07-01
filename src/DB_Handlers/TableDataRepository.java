@@ -5,32 +5,56 @@ import model.Student;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TableDataRepository implements TableDataMethodHandler{
 
-    private JTable table;
-    private JScrollPane scrollPane;
+    private HashMap<Student, Double> averageGradesMap;
 
     public TableDataRepository() {
-        table = new JTable();
-        scrollPane = new JScrollPane(table);
-        table.setPreferredScrollableViewportSize(new Dimension(450, 63));
-        table.setFillsViewportHeight(true);
+        averageGradesMap = new HashMap<>();
+    }
+
+
+    @Override
+    public void averageGradeCalculator(HashMap<Student, HashMap<String, Integer>> subjectMap) {
+        for (Map.Entry<Student, HashMap<String, Integer>> entry : subjectMap.entrySet()) {
+            Student student = entry.getKey();
+            HashMap<String, Integer> subjects = entry.getValue();
+
+            int totalGrades = 0;
+            int subjectCount = subjects.size();
+
+            for (Integer grade : subjects.values()) {
+                totalGrades += grade;
+            }
+
+            double averageGrade = (double) totalGrades / subjectCount;
+
+            averageGradesMap.put(student, averageGrade);
+        }
     }
 
     @Override
-    public void populateTableData(List<Student> studentList) {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Name");
-        model.addColumn("Surname");
-        model.addColumn("College");
-//        model.addColumn("Average Grade");
+    public void printAverageGrades() {
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        for (Map.Entry<Student, Double> entry : averageGradesMap.entrySet()) {
+            Student student = entry.getKey();
+            Double averageGrade = entry.getValue();
 
-        for (Student student : studentList){
-            Object[] rowData = {student.getIme(), student.getSurname(), student.getCollege()};
+            String formattedAverageGrade = decimalFormat.format(averageGrade);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Student: ").append(student.toString()).append("\n");
+            sb.append("Average grade: ").append(formattedAverageGrade);
+            System.out.println(sb.toString());
         }
+    }
 
-        table.setModel(model);
+    public HashMap<Student, Double> getAverageGradesMap() {
+        return averageGradesMap;
     }
 }

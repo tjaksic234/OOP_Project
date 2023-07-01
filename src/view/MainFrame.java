@@ -2,6 +2,7 @@ package view;
 
 import DB_Handlers.StudentDataRepository;
 import DB_Handlers.SubjectDataRepository;
+import DB_Handlers.TableDataRepository;
 import controller.Controller;
 import model.Student;
 import javax.swing.*;
@@ -33,7 +34,7 @@ public class MainFrame extends JFrame  {
         surname = new JTextField(15);
         college = new JTextField(15);
         next_button = new JButton("Dalje");
-        controller = new Controller(new StudentDataRepository(),new SubjectDataRepository());
+        controller = new Controller(new StudentDataRepository(),new SubjectDataRepository(),new TableDataRepository());
 
     }
 
@@ -107,7 +108,7 @@ public class MainFrame extends JFrame  {
                 controller.addStudent(new Student(studentName, studentSurname, studentCollege));
 
                 // Perform other actions or open new frames as needed
-                System.out.println("------------------DATA CHECKER---------------------");
+                System.out.println("=================STUDENT DATA CHECK=================");
                 controller.getStudentList();
 
                 // Open the next frame

@@ -145,12 +145,15 @@ public class SubjectFrame extends JFrame {
             Integer grade = (Integer) grades.getSelectedItem();
             Student student = controller.getLastStudent();
             controller.addSubject(student,subject, grade);
-            controller.getSubjectList();
+//            controller.getSubjectList();
 
 
         });
         show_students.addActionListener(e -> {
-            controller.getStudentsWithSubjectsString();
+            System.out.println("==============SUBJECT DATA CHECK================");
+            controller.printStudentsWithSubjects();
+            System.out.println("==============AVERAGE GRADE DATA CHECK================");
+            controller.printAverageGrades();
 
         });
     }
