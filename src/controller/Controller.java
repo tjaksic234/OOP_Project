@@ -40,9 +40,6 @@ public class Controller {
     public void addSubject(Student student,String subject_name, int grade) {
         subjectDataRepository.addSubject(student, subject_name, grade);
     }
-//    public void getSubjectList() {
-//        subjectDataRepository.getSubjectList();
-//    }
     public void printStudentsWithSubjects() {
         subjectDataRepository.printStudentsWithSubjects();
     }
@@ -56,6 +53,9 @@ public class Controller {
         HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.checkMapInfo();
         tableDataRepository.averageGradeCalculator(subjectMap);
         tableDataRepository.printAverageGrades();
+    }
+    public HashMap<Student,Double> getAverageGrades(){
+        return tableDataRepository.getAverageGradesMap();
     }
 
 

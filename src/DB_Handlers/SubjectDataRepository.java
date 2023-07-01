@@ -15,7 +15,6 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
     }
 
 
-    // TODO implement a new way to fetch and store students into the subjectMap
     @Override
     public void addSubject(Student student,String subject_name, int grade) {
         if (student != null) {
@@ -30,12 +29,6 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
         }
     }
 
-
-//    @Override
-//    public void getSubjectList() {
-//        System.out.println(toString());
-//    }
-
     @Override
     public void printStudentsWithSubjects() {
         HashMap<Student, HashMap<String, Integer>> subjectMap = checkMapInfo();
@@ -43,7 +36,7 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
             Student student = entry.getKey();
             HashMap<String, Integer> subjects = entry.getValue();
             StringBuilder sb = new StringBuilder();
-            sb.append("(Student: ").append(student.getIme()).append(" Surname: ").append(student.getSurname()).
+            sb.append("(Student: ").append(student.getIme()).append(", Surname: ").append(student.getSurname()).
                     append(", College: ").append(student.getCollege()).append(")\n");
             sb.append("Subjects:\n");
 
@@ -61,12 +54,5 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
     public HashMap<Student, HashMap<String, Integer>> checkMapInfo(){
         return subjectMap;
     }
-
-//    @Override
-//    public String toString() {
-//        return "SubjectData{" +
-//                "subjectMap=" + subjectMap +
-//                '}';
-//    }
 
 }

@@ -1,14 +1,24 @@
 package view;
 
+import controller.Controller;
+import model.Student;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TableFrame extends JFrame {
 
     private JTable table;
     private JScrollPane scrollPane;
+    private DefaultTableModel model;
+    private Controller controller;
 
     public TableFrame(){
         super("Studenti:");
@@ -20,67 +30,76 @@ public class TableFrame extends JFrame {
 
         init();
         layoutSet();
+
     }
 
     public void init(){
 
-        // Table initialization
-        String[] columns = {"Name", "Surname", "Sollege", "Average grade"};
-        Object[][] data = {
-                {"John", "Doe", "ABC College", 85.5},
-                {"Jane", "Smith", "XYZ College", 92.0},
-                {"Michael", "Johnson", "DEF College", 78.3},
-                {"Michael","Jordan","ABC College",100.0}
-                // Add more rows as needed
-        };
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{"Name", "Surname", "College","Average grade"});
 
-//        DefaultTableModel model = new DefaultTableModel(data, columns){
-//            public boolean isCellEditable(int row, int column){
-//                return false;
-//            }
-//        };
-
-
-
-        table = new JTable(data,columns){
-
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-            public Component prepareRenderer(TableCellRenderer renderer, int data, int column){
-                Component c = super.prepareRenderer(renderer, data, column);
-
-                if(data % 2 == 0){
-                    c.setBackground(Color.WHITE);
-                }else{
-                    c.setBackground(Color.WHITE);
-                }
-                if (isCellSelected(data, column))
-                    c.setBackground(Color.GREEN);
-                return c;
+        // Create the table using the model
+        table = new JTable(model){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells non-editable
             }
         };
-        table.setPreferredScrollableViewportSize(new Dimension(450, 63));
-        table.setFillsViewportHeight(true);
+
+        // Create a TableRowSorter and associate it with the table model
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
+
+        // Set the custom Comparator for the "Name" column
+        Comparator<String> nameLengthComparator = Comparator.comparingInt(String::length);
+        sorter.setComparator(0, nameLengthComparator);
+
+        // Sort the table based on the "Age" column in descending order
+        sorter.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
+
+        // Create a scroll pane and add the table to it
         scrollPane = new JScrollPane(table);
+
     }
 
+
     public void layoutSet(){
-        JPanel northPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        //layout za JTable
-
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(30,5,5,5);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        northPanel.add(scrollPane,gbc);
+        JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.add(scrollPane, BorderLayout.CENTER);
 
         setLayout(new BorderLayout());
-        add(scrollPane, BorderLayout.NORTH);
+        add(northPanel, BorderLayout.NORTH);
+
+        // TODO implement the buttons and save data logic
+
+        pack(); // Adjust the frame size to fit the components
+
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public void updateTableData(){
+        if (controller != null){
+            // Clear the table
+            model.setRowCount(0);
+
+            // Get student data from the controller
+            HashMap<Student, Double> studentGrades = controller.getAverageGrades();
+
+            // Add data to the table
+            for (Map.Entry<Student, Double> entry : studentGrades.entrySet()) {
+                Student student = entry.getKey();
+                Double averageGrade = entry.getValue();
+
+                // Format the average grade to two decimal places
+                String formattedAverageGrade = String.format("%.2f", averageGrade);
+
+                model.addRow(new Object[]{student.getIme(), student.getSurname(),
+                        student.getCollege(), formattedAverageGrade});
+            }
+        }
 
     }
 }

@@ -145,7 +145,6 @@ public class SubjectFrame extends JFrame {
             Integer grade = (Integer) grades.getSelectedItem();
             Student student = controller.getLastStudent();
             controller.addSubject(student,subject, grade);
-//            controller.getSubjectList();
 
 
         });
@@ -154,6 +153,12 @@ public class SubjectFrame extends JFrame {
             controller.printStudentsWithSubjects();
             System.out.println("==============AVERAGE GRADE DATA CHECK================");
             controller.printAverageGrades();
+
+            // Open the TableFrame
+            TableFrame tableFrame = new TableFrame();
+            tableFrame.setController(controller);
+            tableFrame.updateTableData();
+            dispose();
 
         });
     }
