@@ -1,15 +1,16 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class StudentTableFrame extends JFrame {
+public class TableFrame extends JFrame {
 
     private JTable table;
     private JScrollPane scrollPane;
 
-    public StudentTableFrame(){
+    public TableFrame(){
         super("Studenti:");
         setSize(550, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,15 +24,29 @@ public class StudentTableFrame extends JFrame {
 
     public void init(){
 
-        //table initialization
-        String[] columns = {"Ime", "Prezime", "Fakultet", "Prosjek"};
-        String[][] data = {{"John","Doe","FPMOZ","8.5"},{"Daisy","Duck","FPMOZ","9.5"},
-                {"Donald","Duck","FPMOZ","9.0"},{"Mickey","Mouse","FPMOZ","10.0"}};
+        // Table initialization
+        String[] columns = {"Name", "Surname", "Sollege", "Average grade"};
+        Object[][] data = {
+                {"John", "Doe", "ABC College", 85.5},
+                {"Jane", "Smith", "XYZ College", 92.0},
+                {"Michael", "Johnson", "DEF College", 78.3},
+                {"Michael","Jordan","ABC College",100.0}
+                // Add more rows as needed
+        };
+
+//        DefaultTableModel model = new DefaultTableModel(data, columns){
+//            public boolean isCellEditable(int row, int column){
+//                return false;
+//            }
+//        };
+
+
+
         table = new JTable(data,columns){
+
             public boolean isCellEditable(int row, int column){
                 return false;
             }
-
             public Component prepareRenderer(TableCellRenderer renderer, int data, int column){
                 Component c = super.prepareRenderer(renderer, data, column);
 
@@ -47,17 +62,14 @@ public class StudentTableFrame extends JFrame {
         };
         table.setPreferredScrollableViewportSize(new Dimension(450, 63));
         table.setFillsViewportHeight(true);
-
-        //scrollPane initialization
         scrollPane = new JScrollPane(table);
-
     }
 
     public void layoutSet(){
         JPanel northPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        //layout za jtable
+        //layout za JTable
 
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(30,5,5,5);
@@ -65,10 +77,10 @@ public class StudentTableFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
-        northPanel.add(scrollPane, gbc);
+        northPanel.add(scrollPane,gbc);
 
         setLayout(new BorderLayout());
-        add(northPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.NORTH);
 
     }
 }

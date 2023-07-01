@@ -1,5 +1,8 @@
 package view;
 
+import controller.Controller;
+import model.Student;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,18 +11,18 @@ public class SubjectFrame extends JFrame {
     private JComboBox<String> subjects;
     private JComboBox<Integer> grades;
     private JButton previous_button, add_subject, new_student, show_students;
-
+    private Controller controller;
     private MainFrame mainFrame;
 
 
-    public SubjectFrame(MainFrame mainFrame){
+    public SubjectFrame(){
         super("Predmeti:");
         setSize(550, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setLocationRelativeTo(null);
         setResizable(false);
-        this.mainFrame = mainFrame;
+
 
 
 
@@ -38,6 +41,7 @@ public class SubjectFrame extends JFrame {
         add_subject = new JButton("Dodaj predmet");
         new_student = new JButton("Novi student");
         show_students = new JButton("Prikaži studente");
+
     }
 
     public void layoutSet(){
@@ -125,29 +129,50 @@ public class SubjectFrame extends JFrame {
 
     public void activateComps(){
         previous_button.addActionListener(e -> {
-            mainFrame.getController().removeLastStudent();
+            getPreviousStudentData();
             mainFrame.setVisible(true);
             dispose();
+            controller.removeLastStudent();
+
         });
-//        new_student.addActionListener(new Subject_Listener(this, mainFrame));
         new_student.addActionListener(e -> {
-            mainFrame.getController().createNewSubjectData();
-            dispose();
-            mainFrame.resetForm();
+            controller.getStudentList();
             mainFrame.setVisible(true);
-            mainFrame.getController().getStudentList();
+            dispose();
         });
         add_subject.addActionListener(e -> {
             String subject = (String) subjects.getSelectedItem();
             Integer grade = (Integer) grades.getSelectedItem();
-            mainFrame.getController().addSubject(subject, grade);
-            mainFrame.getController().getSubjectList();
+            Student student = controller.getLastStudent();
+            controller.addSubject(student,subject, grade);
+            controller.getSubjectList();
+
 
         });
         show_students.addActionListener(e -> {
-            mainFrame.getController().getStudentsWithSubjectsString();
+            controller.getStudentsWithSubjectsString();
+
         });
     }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
 
+    public void setMainFrameListener(MainFrame mainFrame){
+        this.mainFrame = mainFrame;
+    }
+
+    public void getPreviousStudentData(){
+        Student student = controller.getLastStudent();
+        if (student != null) {
+            mainFrame.getIme().setText(student.getIme());
+            mainFrame.getSurname().setText(student.getSurname());
+            mainFrame.getCollege().setText(student.getCollege());
+        }else {
+            mainFrame.getIme().setText("");
+            mainFrame.getSurname().setText("");
+            mainFrame.getCollege().setText("");
+        }
+    }
 }

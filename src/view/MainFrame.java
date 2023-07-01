@@ -1,7 +1,7 @@
 package view;
 
-import DB_Handlers.StudentData;
-import DB_Handlers.SubjectData;
+import DB_Handlers.StudentDataRepository;
+import DB_Handlers.SubjectDataRepository;
 import controller.Controller;
 import model.Student;
 import javax.swing.*;
@@ -13,7 +13,6 @@ public class MainFrame extends JFrame  {
     private JButton next_button;
 
     private Controller controller;
-    private SubjectFrame subjectFrame;
 
 
     public MainFrame(){
@@ -34,7 +33,7 @@ public class MainFrame extends JFrame  {
         surname = new JTextField(15);
         college = new JTextField(15);
         next_button = new JButton("Dalje");
-        controller = new Controller(new StudentData(),new SubjectData());
+        controller = new Controller(new StudentDataRepository(),new SubjectDataRepository());
 
     }
 
@@ -112,8 +111,12 @@ public class MainFrame extends JFrame  {
                 controller.getStudentList();
 
                 // Open the next frame
-                subjectFrame = new SubjectFrame(this);
-                setVisible(false);
+                SubjectFrame subjectFrame = new SubjectFrame();
+                subjectFrame.setController(controller);
+                subjectFrame.setMainFrameListener(this);
+                dispose();
+                resetForm();
+
             }
 
         });
@@ -132,8 +135,20 @@ public class MainFrame extends JFrame  {
         return college;
     }
 
-    public Controller getController() {
-        return controller;
+    public void setName(JTextField name) {
+        this.name = name;
+    }
+
+    public void setSurname(JTextField surname) {
+        this.surname = surname;
+    }
+
+    public void setCollege(JTextField college) {
+        this.college = college;
+    }
+
+    public JButton getNext_button() {
+        return next_button;
     }
 
     public void resetForm(){
@@ -141,5 +156,7 @@ public class MainFrame extends JFrame  {
         surname.setText("");  // Clear the text in the surname field
         college.setText("");  // Clear the text in the college field
     }
+
+
 }
 

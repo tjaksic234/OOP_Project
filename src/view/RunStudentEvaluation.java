@@ -1,7 +1,5 @@
 package view;
 
-import model.StudentManager;
-
 import javax.swing.*;
 
 public class RunStudentEvaluation extends JFrame {

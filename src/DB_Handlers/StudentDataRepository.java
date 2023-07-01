@@ -5,11 +5,11 @@ import model.Student;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentData implements StudentDataMethodHandler {
+public class StudentDataRepository implements StudentDataMethodHandler {
 
     private List<Student> studentList;
 
-    public StudentData() {
+    public StudentDataRepository() {
         studentList = new ArrayList<>();
     }
 
@@ -30,7 +30,11 @@ public class StudentData implements StudentDataMethodHandler {
 
     @Override
     public Student getLastStudent() {
-        return studentList.get(studentList.size()-1);
+        if (studentList.isEmpty()) {
+            return null;
+        }else {
+            return studentList.get(studentList.size() - 1);
+        }
     }
 
     public List<Student> checkInfo() {

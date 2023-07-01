@@ -1,8 +1,10 @@
 package DB_Handlers;
 
+import model.Student;
+
 public interface SubjectDataMethodHandler {
 
-    void addSubject(String subject_name, int grade);
+    void addSubject(Student student,String subject_name, int grade);
     void getSubjectList();
-    void createNewSubjectData();
+
 }
