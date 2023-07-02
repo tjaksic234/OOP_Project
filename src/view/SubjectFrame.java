@@ -16,7 +16,7 @@ public class SubjectFrame extends JFrame {
 
 
     public SubjectFrame(){
-        super("Predmeti:");
+        super("Subjects:");
         setSize(550, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -37,10 +37,10 @@ public class SubjectFrame extends JFrame {
                 "Kemija","Biologija","Informatika","Tjelesni"};
         subjects = new JComboBox<>(available_subjects);
         grades = new JComboBox<>(grades_list);
-        previous_button = new JButton("Nazad");
-        add_subject = new JButton("Dodaj predmet");
-        new_student = new JButton("Novi student");
-        show_students = new JButton("Prikaži studente");
+        previous_button = new JButton("Go Back");
+        add_subject = new JButton("Add subject");
+        new_student = new JButton("New student");
+        show_students = new JButton("Show all students");
 
     }
 
@@ -53,7 +53,7 @@ public class SubjectFrame extends JFrame {
 
         //layout i label za predmete
 
-        JLabel subject_label = new JLabel("Odabir predmeta:");
+        JLabel subject_label = new JLabel("Choose at least 3 subjects:");
         gbc.insets = new Insets(20,15,5,5);
         north_panel.add(subject_label, gbc);
 
@@ -173,7 +173,7 @@ public class SubjectFrame extends JFrame {
     public void getPreviousStudentData(){
         Student student = controller.getLastStudent();
         if (student != null) {
-            mainFrame.getIme().setText(student.getIme());
+            mainFrame.getIme().setText(student.getName());
             mainFrame.getSurname().setText(student.getSurname());
             mainFrame.getCollege().setText(student.getCollege());
         }else {

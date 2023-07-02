@@ -36,7 +36,7 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
             Student student = entry.getKey();
             HashMap<String, Integer> subjects = entry.getValue();
             StringBuilder sb = new StringBuilder();
-            sb.append("(Student: ").append(student.getIme()).append(", Surname: ").append(student.getSurname()).
+            sb.append("(Student: ").append(student.getName()).append(", Surname: ").append(student.getSurname()).
                     append(", College: ").append(student.getCollege()).append(")\n");
             sb.append("Subjects:\n");
 

@@ -14,7 +14,7 @@ public class Student {
         this.college = college;
     }
 
-    public String getIme() {
+    public String getName() {
         return name;
     }
 

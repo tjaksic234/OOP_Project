@@ -15,7 +15,7 @@ public class DBHandler {
             for (Map.Entry<Student, Double> entry : data.entrySet()) {
                 Student student = entry.getKey();
                 Double averageGrade = entry.getValue();
-                String line = student.getIme() + "," + student.getSurname() + "," +
+                String line = student.getName() + "," + student.getSurname() + "," +
                         student.getCollege() + "," + averageGrade;
                 writer.write(line);
                 writer.newLine();

@@ -6,12 +6,9 @@ import model.Student;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +21,7 @@ public class TableFrame extends JFrame {
     private JButton save_data, read_data, new_data;
 
     public TableFrame(){
-        super("Studenti:");
+        super("Students:");
         setSize(550, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -134,7 +131,7 @@ public class TableFrame extends JFrame {
                 // Format the average grade to two decimal places
                 String formattedAverageGrade = String.format("%.2f", averageGrade);
 
-                model.addRow(new Object[]{student.getIme(), student.getSurname(),
+                model.addRow(new Object[]{student.getName(), student.getSurname(),
                         student.getCollege(), formattedAverageGrade});
             }
         }

@@ -17,7 +17,7 @@ public class MainFrame extends JFrame  {
 
 
     public MainFrame(){
-        super("Student detalji:");
+        super("Student details:");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -33,7 +33,7 @@ public class MainFrame extends JFrame  {
         name = new JTextField(15);
         surname = new JTextField(15);
         college = new JTextField(15);
-        next_button = new JButton("Dalje");
+        next_button = new JButton("Next");
         controller = new Controller(new StudentDataRepository(),new SubjectDataRepository(),new TableDataRepository());
 
     }
@@ -50,7 +50,7 @@ public class MainFrame extends JFrame  {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
-        panel.add(new JLabel("Ime:"), gbc);
+        panel.add(new JLabel("Name:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -62,7 +62,7 @@ public class MainFrame extends JFrame  {
         gbc.insets = new Insets(30,5,5,5);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Prezime:"), gbc);
+        panel.add(new JLabel("Surname:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -73,7 +73,7 @@ public class MainFrame extends JFrame  {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel.add(new JLabel("Fakultet:"), gbc);
+        panel.add(new JLabel("College:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
