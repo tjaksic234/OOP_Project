@@ -46,16 +46,19 @@ public class Controller {
 
     // Table details manager
     public void averageGradeCalculator() {
-        HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.checkMapInfo();
+        HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.getSubjectData();
         tableDataRepository.averageGradeCalculator(subjectMap);
     }
     public void printAverageGrades(){
-        HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.checkMapInfo();
+        HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.getSubjectData();
         tableDataRepository.averageGradeCalculator(subjectMap);
         tableDataRepository.printAverageGrades();
     }
     public HashMap<Student,Double> getAverageGrades(){
         return tableDataRepository.getAverageGradesMap();
+    }
+    public void setAverageGrades(HashMap<Student, Double> averageGradesMap){
+        tableDataRepository.setAverageGrades(averageGradesMap);
     }
 
 

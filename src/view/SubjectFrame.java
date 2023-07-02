@@ -136,7 +136,6 @@ public class SubjectFrame extends JFrame {
 
         });
         new_student.addActionListener(e -> {
-            controller.getStudentList();
             mainFrame.setVisible(true);
             dispose();
         });
@@ -149,7 +148,7 @@ public class SubjectFrame extends JFrame {
 
         });
         show_students.addActionListener(e -> {
-            System.out.println("==============SUBJECT DATA CHECK================");
+            System.out.println("==============STUDENT - SUBJECT DATA CHECK================");
             controller.printStudentsWithSubjects();
             System.out.println("==============AVERAGE GRADE DATA CHECK================");
             controller.printAverageGrades();

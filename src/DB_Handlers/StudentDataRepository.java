@@ -40,7 +40,7 @@ public class StudentDataRepository implements StudentDataMethodHandler {
         }
     }
 
-    public List<Student> checkInfo() {
+    public List<Student> getStudentData() {
     	return studentList;
     }
 

@@ -1,13 +1,15 @@
 package view;
 
 import controller.Controller;
+import model.DBHandler;
 import model.Student;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class TableFrame extends JFrame {
     private JScrollPane scrollPane;
     private DefaultTableModel model;
     private Controller controller;
+    private JButton save_data, read_data, new_data;
 
     public TableFrame(){
         super("Studenti:");
@@ -30,6 +33,7 @@ public class TableFrame extends JFrame {
 
         init();
         layoutSet();
+        activateComps();
 
     }
 
@@ -46,19 +50,13 @@ public class TableFrame extends JFrame {
             }
         };
 
-        // Create a TableRowSorter and associate it with the table model
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        table.setRowSorter(sorter);
-
-        // Set the custom Comparator for the "Name" column
-        Comparator<String> nameLengthComparator = Comparator.comparingInt(String::length);
-        sorter.setComparator(0, nameLengthComparator);
-
-        // Sort the table based on the "Age" column in descending order
-        sorter.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
-
         // Create a scroll pane and add the table to it
         scrollPane = new JScrollPane(table);
+
+        // Button initialization
+        save_data = new JButton("Save data");
+        read_data = new JButton("Read data");
+        new_data = new JButton("New data");
 
     }
 
@@ -71,9 +69,49 @@ public class TableFrame extends JFrame {
         add(northPanel, BorderLayout.NORTH);
 
         // TODO implement the buttons and save data logic
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(save_data, BorderLayout.EAST);
+        southPanel.add(read_data, BorderLayout.WEST);
+        southPanel.add(new_data, BorderLayout.CENTER);
+        add(southPanel, BorderLayout.SOUTH);
 
         pack(); // Adjust the frame size to fit the components
 
+    }
+
+    public void activateComps(){
+        // Save data to txt file
+        save_data.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (controller != null) {
+                    HashMap<Student, Double> studentGrades = controller.getAverageGrades();
+                    DBHandler dbHandler = new DBHandler();
+                    dbHandler.saveDataToFile(studentGrades);
+                }
+            }
+        });
+
+        // Read data from txt file
+        read_data.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DBHandler dbHandler = new DBHandler();
+                HashMap<Student, Double> studentGrades = dbHandler.readDataFromFile();
+                controller.setAverageGrades(studentGrades);
+                updateTableData();
+            }
+        });
+
+        // Create new data
+        new_data.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainFrame mainFrame = new MainFrame();
+                System.out.println("New data generated successfully.");
+                dispose();
+            }
+        });
     }
 
     public void setController(Controller controller) {

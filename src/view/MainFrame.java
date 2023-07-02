@@ -107,10 +107,6 @@ public class MainFrame extends JFrame  {
                 // Adding student to database
                 controller.addStudent(new Student(studentName, studentSurname, studentCollege));
 
-                // Perform other actions or open new frames as needed
-                System.out.println("=================STUDENT DATA CHECK=================");
-                controller.getStudentList();
-
                 // Open the next frame
                 SubjectFrame subjectFrame = new SubjectFrame();
                 subjectFrame.setController(controller);

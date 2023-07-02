@@ -54,7 +54,13 @@ public class TableDataRepository implements TableDataMethodHandler{
         }
     }
 
+    @Override
     public HashMap<Student, Double> getAverageGradesMap() {
         return averageGradesMap;
+    }
+
+    @Override
+    public void setAverageGrades(HashMap<Student, Double> averageGradesMap) {
+        this.averageGradesMap = averageGradesMap;
     }
 }

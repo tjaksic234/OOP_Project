@@ -31,7 +31,7 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
 
     @Override
     public void printStudentsWithSubjects() {
-        HashMap<Student, HashMap<String, Integer>> subjectMap = checkMapInfo();
+        HashMap<Student, HashMap<String, Integer>> subjectMap = getSubjectData();
         for (Map.Entry<Student, HashMap<String, Integer>> entry : subjectMap.entrySet()) {
             Student student = entry.getKey();
             HashMap<String, Integer> subjects = entry.getValue();
@@ -51,7 +51,7 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
     }
 
 
-    public HashMap<Student, HashMap<String, Integer>> checkMapInfo(){
+    public HashMap<Student, HashMap<String, Integer>> getSubjectData(){
         return subjectMap;
     }
 
