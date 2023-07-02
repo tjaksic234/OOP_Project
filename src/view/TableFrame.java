@@ -18,7 +18,7 @@ public class TableFrame extends JFrame {
     private JScrollPane scrollPane;
     private DefaultTableModel model;
     private Controller controller;
-    private JButton save_data, read_data, new_data;
+    private JButton save_data, read_data, new_data, sort_data;
 
     public TableFrame(){
         super("Students:");

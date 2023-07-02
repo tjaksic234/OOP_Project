@@ -33,7 +33,7 @@ public class SubjectFrame extends JFrame {
 
     public void init(){
         Integer[] grades_list = {1,2,3,4,5};
-        String[] available_subjects = {"Matematika","Fizika","Povijest","Geografija",
+        String[] available_subjects = {"Select a subject","Matematika","Fizika","Povijest","Geografija",
                 "Kemija","Biologija","Informatika","Tjelesni"};
         subjects = new JComboBox<>(available_subjects);
         grades = new JComboBox<>(grades_list);
@@ -103,31 +103,10 @@ public class SubjectFrame extends JFrame {
         add(south_panel, BorderLayout.CENTER);
     }
 
-    public JButton getPrevious_button() {
-        return previous_button;
-    }
-
-    public JButton getAdd_subject() {
-        return add_subject;
-    }
-
-    public JButton getNew_student() {
-        return new_student;
-    }
-
-    public JButton getShow_students() {
-        return show_students;
-    }
-
-    public JComboBox<String> getSubjects() {
-        return subjects;
-    }
-
-    public JComboBox<Integer> getGrades() {
-        return grades;
-    }
-
     public void activateComps(){
+        show_students.setEnabled(false);
+        new_student.setEnabled(false);
+
         previous_button.addActionListener(e -> {
             getPreviousStudentData();
             mainFrame.setVisible(true);
@@ -140,16 +119,27 @@ public class SubjectFrame extends JFrame {
             dispose();
         });
         add_subject.addActionListener(e -> {
-            String subject = (String) subjects.getSelectedItem();
-            Integer grade = (Integer) grades.getSelectedItem();
-            Student student = controller.getLastStudent();
-            controller.addSubject(student,subject, grade);
+            if (subjects.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(
+                        SubjectFrame.this,
+                        "Please select a subject.",
+                        "Missing Subject",
+                        JOptionPane.WARNING_MESSAGE
+                );
+            }else {
+                String subject = (String) subjects.getSelectedItem();
+                Integer grade = (Integer) grades.getSelectedItem();
+                Student student = controller.getLastStudent();
+                controller.addSubject(student,subject, grade);
 
-
+                // Enable the buttons if the student has 3 or more subjects
+                if (controller.getSubjectCount(student) >= 3) {
+                    show_students.setEnabled(true);
+                    new_student.setEnabled(true);
+                }
+            }
         });
         show_students.addActionListener(e -> {
-            System.out.println("==============STUDENT - SUBJECT DATA CHECK================");
-            controller.printStudentsWithSubjects();
             System.out.println("==============AVERAGE GRADE DATA CHECK================");
             controller.printAverageGrades();
 

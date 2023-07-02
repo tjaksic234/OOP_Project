@@ -40,8 +40,8 @@ public class Controller {
     public void addSubject(Student student,String subject_name, int grade) {
         subjectDataRepository.addSubject(student, subject_name, grade);
     }
-    public void printStudentsWithSubjects() {
-        subjectDataRepository.printStudentsWithSubjects();
+    public int getSubjectCount(Student student) {
+        return subjectDataRepository.getSubjectCount(student);
     }
 
     // Table details manager

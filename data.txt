@@ -1,3 +1,1 @@
-Teo,Jaksic,UNIZD,3.0
-Josip,Kiš,Gas,1.0
-Karlo,nekHas,UNIZD,2
+t,t,t,45

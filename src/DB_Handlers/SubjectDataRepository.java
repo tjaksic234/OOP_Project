@@ -30,29 +30,18 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
     }
 
     @Override
-    public void printStudentsWithSubjects() {
-        HashMap<Student, HashMap<String, Integer>> subjectMap = getSubjectData();
-        for (Map.Entry<Student, HashMap<String, Integer>> entry : subjectMap.entrySet()) {
-            Student student = entry.getKey();
-            HashMap<String, Integer> subjects = entry.getValue();
-            StringBuilder sb = new StringBuilder();
-            sb.append("(Student: ").append(student.getName()).append(", Surname: ").append(student.getSurname()).
-                    append(", College: ").append(student.getCollege()).append(")\n");
-            sb.append("Subjects:\n");
-
-            for (Map.Entry<String, Integer> subjectEntry : subjects.entrySet()) {
-                String subjectName = subjectEntry.getKey();
-                Integer grade = subjectEntry.getValue();
-                sb.append("  - ").append(subjectName).append(": ").append(grade).append("\n");
-            }
-
-            System.out.println(sb.toString());
-        }
-    }
-
-
     public HashMap<Student, HashMap<String, Integer>> getSubjectData(){
         return subjectMap;
+    }
+
+    @Override
+    public int getSubjectCount(Student student) {
+        if (subjectMap.containsKey(student)) {
+            HashMap<String, Integer> studentSubjects = subjectMap.get(student);
+            return studentSubjects.size();
+        } else {
+            return 0;
+        }
     }
 
 }

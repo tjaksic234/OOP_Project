@@ -1,13 +1,14 @@
-package view;
+package Application;
+
+import view.TableFrame;
 
 import javax.swing.*;
 
-public class RunStudentEvaluation extends JFrame {
+public class JTABLE_TESTER {
     public static void main(String[] args) {
-
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame();
+                new TableFrame();
             }
         });
     }
