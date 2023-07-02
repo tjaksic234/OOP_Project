@@ -1,10 +1,9 @@
-package DB_Handlers;
+package Database;
 
 
 import model.Student;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class SubjectDataRepository implements SubjectDataMethodHandler{
 

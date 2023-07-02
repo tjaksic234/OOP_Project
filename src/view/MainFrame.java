@@ -1,8 +1,8 @@
 package view;
 
-import DB_Handlers.StudentDataRepository;
-import DB_Handlers.SubjectDataRepository;
-import DB_Handlers.TableDataRepository;
+import Database.StudentDataRepository;
+import Database.SubjectDataRepository;
+import Database.TableDataRepository;
 import controller.Controller;
 import model.Student;
 import javax.swing.*;

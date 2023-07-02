@@ -1,8 +1,6 @@
-package DB_Handlers;
+package Database;
 
 import model.Student;
-
-import java.util.List;
 
 public interface StudentDataMethodHandler {
 

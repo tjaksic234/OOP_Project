@@ -1,13 +1,9 @@
-package DB_Handlers;
+package Database;
 
 import model.Student;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TableDataRepository implements TableDataMethodHandler{

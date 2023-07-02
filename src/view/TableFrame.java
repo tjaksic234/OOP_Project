@@ -18,7 +18,7 @@ public class TableFrame extends JFrame {
     private JScrollPane scrollPane;
     private DefaultTableModel model;
     private Controller controller;
-    private JButton save_data, read_data, new_data, sort_data;
+    private JButton save_data, read_data, new_data, sort_asc, sort_desc;
 
     public TableFrame(){
         super("Students:");
@@ -54,25 +54,52 @@ public class TableFrame extends JFrame {
         save_data = new JButton("Save data");
         read_data = new JButton("Read data");
         new_data = new JButton("New data");
+        sort_asc = new JButton("Sort ascending");
+        sort_desc = new JButton("Sort descending");
 
     }
 
 
     public void layoutSet(){
-        JPanel northPanel = new JPanel(new BorderLayout());
-        northPanel.add(scrollPane, BorderLayout.CENTER);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
 
-        setLayout(new BorderLayout());
-        add(northPanel, BorderLayout.NORTH);
+        // TODO: Implement the sort buttons
+        JPanel sortButtonsPanel = new JPanel(new GridBagLayout());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        sortButtonsPanel.add(sort_asc, gbc);
 
-        // TODO implement the buttons and save data logic
-        JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(save_data, BorderLayout.EAST);
-        southPanel.add(read_data, BorderLayout.WEST);
-        southPanel.add(new_data, BorderLayout.CENTER);
-        add(southPanel, BorderLayout.SOUTH);
+        gbc.gridx = 1;
+        sortButtonsPanel.add(sort_desc, gbc);
 
-        pack(); // Adjust the frame size to fit the components
+        // TODO: Implement the read buttons and save data logic
+        JPanel dataButtonsPanel = new JPanel(new GridBagLayout());
+        gbc.gridx = 0;
+        dataButtonsPanel.add(read_data, gbc);
+
+        gbc.gridx = 1;
+        dataButtonsPanel.add(new_data, gbc);
+
+        gbc.gridx = 2;
+        dataButtonsPanel.add(save_data, gbc);
+
+        // Add components to the main panel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        add(scrollPane, gbc);
+
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        add(sortButtonsPanel, gbc);
+
+        gbc.gridy = 2;
+        add(dataButtonsPanel, gbc);
+
+        pack();
 
     }
 

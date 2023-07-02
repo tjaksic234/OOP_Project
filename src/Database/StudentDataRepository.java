@@ -1,4 +1,4 @@
-package DB_Handlers;
+package Database;
 
 import model.Student;
 

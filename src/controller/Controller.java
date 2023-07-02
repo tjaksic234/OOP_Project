@@ -1,13 +1,11 @@
 package controller;
 
-import DB_Handlers.StudentDataRepository;
-import DB_Handlers.SubjectDataRepository;
-import DB_Handlers.TableDataRepository;
+import Database.StudentDataRepository;
+import Database.SubjectDataRepository;
+import Database.TableDataRepository;
 import model.Student;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Controller {
     private StudentDataRepository studentDataRepository;
