@@ -3,6 +3,7 @@ package view;
 import controller.Controller;
 import model.DBHandler;
 import model.Student;
+import model.TableSorter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +20,7 @@ public class TableFrame extends JFrame {
     private DefaultTableModel model;
     private Controller controller;
     private JButton save_data, read_data, new_data, sort_asc, sort_desc;
+    private DBHandler dbHandler;
 
     public TableFrame(){
         super("Students:");
@@ -56,6 +58,9 @@ public class TableFrame extends JFrame {
         new_data = new JButton("New data");
         sort_asc = new JButton("Sort ascending");
         sort_desc = new JButton("Sort descending");
+
+        // Database handler initialization
+        dbHandler = new DBHandler();
 
     }
 
@@ -110,7 +115,6 @@ public class TableFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (controller != null) {
                     HashMap<Student, Double> studentGrades = controller.getAverageGrades();
-                    DBHandler dbHandler = new DBHandler();
                     dbHandler.saveDataToFile(studentGrades);
                 }
             }
@@ -120,7 +124,6 @@ public class TableFrame extends JFrame {
         read_data.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DBHandler dbHandler = new DBHandler();
                 HashMap<Student, Double> studentGrades = dbHandler.readDataFromFile();
                 controller.setAverageGrades(studentGrades);
                 updateTableData();
@@ -134,6 +137,36 @@ public class TableFrame extends JFrame {
                 MainFrame mainFrame = new MainFrame();
                 System.out.println("New data generated successfully.");
                 dispose();
+            }
+        });
+
+        // Sort data ascending
+        sort_asc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HashMap<Student, Double> studentGrades = controller.getAverageGrades();
+
+                // Call the TableSorter class to sort the data
+                // Update the controller with the sorted data
+                controller.setAverageGrades(TableSorter.sortTableAscending(studentGrades));
+
+                // Update the table data after sorting
+                updateTableData();
+            }
+        });
+
+        // Sort data descending
+        sort_desc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HashMap<Student, Double> studentGrades = controller.getAverageGrades();
+
+                // Call the TableSorter class to sort the data
+                // Update the controller with the sorted data
+                controller.setAverageGrades(TableSorter.sortTableDescending(studentGrades));
+
+                // Update the table data after sorting
+                updateTableData();
             }
         });
     }
