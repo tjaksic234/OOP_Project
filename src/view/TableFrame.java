@@ -13,6 +13,9 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The TableFrame class extends JFrame and represents a frame that displays a table of student data.
+ */
 public class TableFrame extends JFrame {
 
     private JTable table;
@@ -22,7 +25,10 @@ public class TableFrame extends JFrame {
     private JButton save_data, read_data, new_data, sort_asc, sort_desc;
     private DBHandler dbHandler;
 
-    public TableFrame(){
+    /**
+     * Constructs a TableFrame object.
+     */
+    public TableFrame() {
         super("Students:");
         setSize(550, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,16 +39,17 @@ public class TableFrame extends JFrame {
         init();
         layoutSet();
         activateComps();
-
     }
 
-    public void init(){
-
+    /**
+     * Initializes the components of the TableFrame.
+     */
+    public void init() {
         model = new DefaultTableModel();
-        model.setColumnIdentifiers(new Object[]{"Name", "Surname", "College","Average grade"});
+        model.setColumnIdentifiers(new Object[]{"Name", "Surname", "College", "Average grade"});
 
         // Create the table using the model
-        table = new JTable(model){
+        table = new JTable(model) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make all cells non-editable
@@ -61,11 +68,12 @@ public class TableFrame extends JFrame {
 
         // Database handler initialization
         dbHandler = new DBHandler();
-
     }
 
-
-    public void layoutSet(){
+    /**
+     * Sets the layout of the TableFrame.
+     */
+    public void layoutSet() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -105,10 +113,12 @@ public class TableFrame extends JFrame {
         add(dataButtonsPanel, gbc);
 
         pack();
-
     }
 
-    public void activateComps(){
+    /**
+     * Activates the components and defines their event listeners.
+     */
+    public void activateComps() {
         // Save data to txt file
         save_data.addActionListener(new ActionListener() {
             @Override
@@ -145,12 +155,7 @@ public class TableFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 HashMap<Student, Double> studentGrades = controller.getAverageGrades();
-
-                // Call the TableSorter class to sort the data
-                // Update the controller with the sorted data
                 controller.setAverageGrades(TableSorter.sortTableAscending(studentGrades));
-
-                // Update the table data after sorting
                 updateTableData();
             }
         });
@@ -160,23 +165,26 @@ public class TableFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 HashMap<Student, Double> studentGrades = controller.getAverageGrades();
-
-                // Call the TableSorter class to sort the data
-                // Update the controller with the sorted data
                 controller.setAverageGrades(TableSorter.sortTableDescending(studentGrades));
-
-                // Update the table data after sorting
                 updateTableData();
             }
         });
     }
 
+    /**
+     * Sets the controller for the TableFrame.
+     *
+     * @param controller the controller to be set.
+     */
     public void setController(Controller controller) {
         this.controller = controller;
     }
 
-    public void updateTableData(){
-        if (controller != null){
+    /**
+     * Updates the table data based on the current student data in the controller.
+     */
+    public void updateTableData() {
+        if (controller != null) {
             // Clear the table
             model.setRowCount(0);
 
@@ -187,14 +195,11 @@ public class TableFrame extends JFrame {
             for (Map.Entry<Student, Double> entry : studentGrades.entrySet()) {
                 Student student = entry.getKey();
                 Double averageGrade = entry.getValue();
-
-                // Format the average grade to two decimal places
                 String formattedAverageGrade = String.format("%.2f", averageGrade);
 
                 model.addRow(new Object[]{student.getName(), student.getSurname(),
                         student.getCollege(), formattedAverageGrade});
             }
         }
-
     }
 }

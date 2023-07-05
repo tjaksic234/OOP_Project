@@ -4,9 +4,18 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The DBHandler class is responsible for saving and reading data to/from a file.
+ */
 public class DBHandler {
+
     private static final String FILE_PATH = "data.bin";
 
+    /**
+     * Saves the provided data to a file.
+     *
+     * @param data The data to be saved.
+     */
     public void saveDataToFile(HashMap<Student, Double> data) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -19,6 +28,11 @@ public class DBHandler {
         }
     }
 
+    /**
+     * Reads data from a file and returns it as a HashMap of Students and their average grades.
+     *
+     * @return The HashMap containing the read data.
+     */
     public HashMap<Student, Double> readDataFromFile() {
         HashMap<Student, Double> data = new HashMap<>();
 
@@ -45,6 +59,4 @@ public class DBHandler {
 
         return data;
     }
-
-
 }

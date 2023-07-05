@@ -1,21 +1,33 @@
 package Database;
 
-
 import model.Student;
 
 import java.util.HashMap;
 
-public class SubjectDataRepository implements SubjectDataMethodHandler{
+/**
+ * The SubjectDataRepository class handles the storage and retrieval of subject data associated with students.
+ */
+public class SubjectDataRepository implements SubjectDataMethodHandler {
 
-    private HashMap<Student,HashMap<String,Integer>> subjectMap;
+    private HashMap<Student, HashMap<String, Integer>> subjectMap;
 
+    /**
+     * Constructs a new SubjectDataRepository object.
+     * Initializes an empty map to store subject data.
+     */
     public SubjectDataRepository() {
         subjectMap = new HashMap<>();
     }
 
-
+    /**
+     * Adds a subject with the given name and grade to a specific student.
+     *
+     * @param student       The student to whom the subject is added.
+     * @param subject_name  The name of the subject.
+     * @param grade         The grade obtained in the subject.
+     */
     @Override
-    public void addSubject(Student student,String subject_name, int grade) {
+    public void addSubject(Student student, String subject_name, int grade) {
         if (student != null) {
             if (subjectMap.containsKey(student)) {
                 HashMap<String, Integer> studentSubjects = subjectMap.get(student);
@@ -28,11 +40,22 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
         }
     }
 
+    /**
+     * Retrieves the subject data, represented as a map of students and their subject information.
+     *
+     * @return The map of students and their subject data.
+     */
     @Override
-    public HashMap<Student, HashMap<String, Integer>> getSubjectData(){
+    public HashMap<Student, HashMap<String, Integer>> getSubjectData() {
         return subjectMap;
     }
 
+    /**
+     * Retrieves the count of subjects associated with a specific student.
+     *
+     * @param student The student for whom the subject count is retrieved.
+     * @return The count of subjects associated with the student.
+     */
     @Override
     public int getSubjectCount(Student student) {
         if (subjectMap.containsKey(student)) {
@@ -42,5 +65,4 @@ public class SubjectDataRepository implements SubjectDataMethodHandler{
             return 0;
         }
     }
-
 }

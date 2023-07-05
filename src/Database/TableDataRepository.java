@@ -6,15 +6,26 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TableDataRepository implements TableDataMethodHandler{
+/**
+ * The TableDataRepository class handles the storage and manipulation of table data.
+ */
+public class TableDataRepository implements TableDataMethodHandler {
 
     private HashMap<Student, Double> averageGradesMap;
 
+    /**
+     * Constructs a new TableDataRepository object.
+     * Initializes an empty map to store average grades.
+     */
     public TableDataRepository() {
         averageGradesMap = new HashMap<>();
     }
 
-
+    /**
+     * Calculates the average grades based on the provided subject map.
+     *
+     * @param subjectMap The map of students and their subject data.
+     */
     @Override
     public void averageGradeCalculator(HashMap<Student, HashMap<String, Integer>> subjectMap) {
         for (Map.Entry<Student, HashMap<String, Integer>> entry : subjectMap.entrySet()) {
@@ -34,6 +45,9 @@ public class TableDataRepository implements TableDataMethodHandler{
         }
     }
 
+    /**
+     * Prints the average grades.
+     */
     @Override
     public void printAverageGrades() {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -50,11 +64,21 @@ public class TableDataRepository implements TableDataMethodHandler{
         }
     }
 
+    /**
+     * Retrieves the map of students and their average grades.
+     *
+     * @return The map of students and their average grades.
+     */
     @Override
     public HashMap<Student, Double> getAverageGradesMap() {
         return averageGradesMap;
     }
 
+    /**
+     * Sets the map of students and their average grades.
+     *
+     * @param averageGradesMap The map of students and their average grades to be set.
+     */
     @Override
     public void setAverageGrades(HashMap<Student, Double> averageGradesMap) {
         this.averageGradesMap = averageGradesMap;
