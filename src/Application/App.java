@@ -6,9 +6,9 @@ import javax.swing.*;
 
 /**
  * The main class of the application.
- * This class extends the JFrame class and serves as the entry point for the application.
+ * This class serves as the entry point for the application.
  */
-public class App extends JFrame {
+public class App {
 
     /**
      * The main method of the application.

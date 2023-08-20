@@ -26,7 +26,7 @@ public interface TableDataMethodHandler {
      *
      * @return The map of students and their average grades.
      */
-    HashMap<Student, Double> getAverageGradesMap();
+    HashMap<Student, Double> getAverageGrades();
 
     /**
      * Sets the map of students and their average grades.

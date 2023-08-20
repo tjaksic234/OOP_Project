@@ -7,6 +7,10 @@ import model.Student;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *
+ * The MainFrame class functions as the view for presenting student details.
+ */
 
 public class MainFrame extends JFrame implements MainFrameListener, StudentDataListener {
 

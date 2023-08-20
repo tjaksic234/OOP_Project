@@ -58,6 +58,16 @@ public class Controller {
         return studentDataRepository.getLastStudent();
     }
 
+    /**
+     * Retrieves the student at the specified index from the data repository.
+     *
+     * @param index The index of the student to be retrieved.
+     * @return The student at the specified index.
+     */
+    public Student getStudentAtIndex(int index) {
+        return studentDataRepository.getStudentAtIndex(index);
+    }
+
     // Subject details manager
 
     /**
@@ -106,7 +116,7 @@ public class Controller {
      * @return The map of students and their average grades.
      */
     public HashMap<Student, Double> getAverageGrades() {
-        return tableDataRepository.getAverageGradesMap();
+        return tableDataRepository.getAverageGrades();
     }
 
     /**

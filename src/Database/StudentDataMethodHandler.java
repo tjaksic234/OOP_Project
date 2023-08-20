@@ -30,4 +30,12 @@ public interface StudentDataMethodHandler {
      * @return The last added student.
      */
     Student getLastStudent();
+
+    /**
+     * Retrieves the student at the specified index from the data repository.
+     *
+     * @param index The index of the student to be retrieved.
+     * @return The student at the specified index.
+     */
+    Student getStudentAtIndex(int index);
 }

@@ -64,6 +64,17 @@ public class StudentDataRepository implements StudentDataMethodHandler {
     }
 
     /**
+     * Retrieves the student at the specified index from the data repository.
+     *
+     * @return The student at the specified index.
+     */
+
+    @Override
+    public Student getStudentAtIndex(int index) {
+        return studentList.get(index);
+    }
+
+    /**
      * Retrieves the list of students stored in the data repository.
      *
      * @return The list of students.

@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class DBHandler {
 
-    private static final String FILE_PATH = "data.bin";
+    private static final String FILE_PATH = "Projekt/src/Storage/data.bin";
 
     /**
      * Saves the provided data to a file.

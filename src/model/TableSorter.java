@@ -3,6 +3,9 @@ package model;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 
+/**
+ * The TableSorter class provides methods for sorting a table of student grades.
+ */
 
 public class TableSorter {
 

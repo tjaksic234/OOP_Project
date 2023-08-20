@@ -66,6 +66,33 @@ public class Student implements Serializable {
                 '}';
     }
 
+    /**
+     * Sets the name of the student.
+     *
+     * @param name The student's name.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Sets the surname of the student.
+     *
+     * @param surname The student's surname.
+     */
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    /**
+     * Sets the college of the student.
+     *
+     * @param college The student's college.
+     */
+    public void setCollege(String college) {
+        this.college = college;
+    }
+
     @Override
     /**
      * Checks if the Student object is equal to another object.

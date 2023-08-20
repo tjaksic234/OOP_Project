@@ -70,7 +70,7 @@ public class TableDataRepository implements TableDataMethodHandler {
      * @return The map of students and their average grades.
      */
     @Override
-    public HashMap<Student, Double> getAverageGradesMap() {
+    public HashMap<Student, Double> getAverageGrades() {
         return averageGradesMap;
     }
 

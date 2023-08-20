@@ -62,6 +62,7 @@ public class SubjectDataRepository implements SubjectDataMethodHandler {
             HashMap<String, Integer> studentSubjects = subjectMap.get(student);
             return studentSubjects.size();
         } else {
+            System.out.println("The student does not exist in the database.");
             return 0;
         }
     }

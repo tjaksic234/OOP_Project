@@ -8,6 +8,10 @@ import model.Student;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The SubjectFrame class serves as the view for displaying subject details.
+ */
+
 public class SubjectFrame extends JFrame {
 
     private JComboBox<String> subjects;
@@ -127,6 +131,7 @@ public class SubjectFrame extends JFrame {
             if (mainFrameListener != null) {
                 mainFrameListener.onSubjectFrameClosed();
             }
+            System.out.println("New student button pressed.");
             dispose();
         });
 
@@ -143,6 +148,8 @@ public class SubjectFrame extends JFrame {
                 Integer grade = (Integer) grades.getSelectedItem();
                 Student student = controller.getLastStudent();
                 controller.addSubject(student, subject, grade);
+                System.out.println("Subject: " + subject + ", Grade: " + grade + " added to student: "
+                        + student.getName() + " - " + student.getSurname());
 
                 if (controller.getSubjectCount(student) >= 3) {
                     show_students.setEnabled(true);
