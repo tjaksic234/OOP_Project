@@ -47,7 +47,7 @@ public class TableFrame extends JFrame {
      */
     public void init() {
         model = new DefaultTableModel();
-        model.setColumnIdentifiers(new Object[]{"Name", "Surname", "College", "Average grade"});
+        model.setColumnIdentifiers(new Object[]{"Name", "Surname","College", "Average grade"});
 
         // Create the table using the model
         table = new JTable(model) {
@@ -142,24 +142,63 @@ public class TableFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (controller != null) {
                     HashMap<Student, Double> studentGrades = controller.getAverageGrades();
-                    dbHandler.saveDataToFile(studentGrades);
+                    HashMap<Student, HashMap<String, Integer>> studentSubjects = controller.getSubjectData(); // Retrieve subjects
+
+                    // Combine student grades and subjects data into a single map
+                    HashMap<Student, HashMap<String, Object>> studentData = new HashMap<>();
+                    for (Student student : studentGrades.keySet()) {
+                        Double averageGrade = studentGrades.get(student);
+                        HashMap<String, Integer> subjects = studentSubjects.getOrDefault(student, new HashMap<>());
+
+                        HashMap<String, Object> studentInfo = new HashMap<>();
+                        studentInfo.put("averageGrade", averageGrade);
+                        studentInfo.put("subjects", subjects);
+
+                        studentData.put(student, studentInfo);
+                    }
+
+                    dbHandler.saveDataToFile(studentData); // Save combined data
 
                     JOptionPane.showMessageDialog(null, "Data saved successfully.");
                 }
             }
         });
 
+
         // Read data from txt file
         read_data.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                HashMap<Student, Double> studentGrades = dbHandler.readDataFromFile();
+                HashMap<Student, HashMap<String, Object>> studentData = dbHandler.readDataFromFile();
+
+                // Extract and set average grades
+                HashMap<Student, Double> studentGrades = new HashMap<>();
+                for (Map.Entry<Student, HashMap<String, Object>> entry : studentData.entrySet()) {
+                    Student student = entry.getKey();
+                    HashMap<String, Object> studentInfo = entry.getValue();
+                    Double averageGrade = (Double) studentInfo.get("averageGrade");
+                    studentGrades.put(student, averageGrade);
+                }
                 controller.setAverageGrades(studentGrades);
+
+                // Extract and set subject data
+                HashMap<Student, HashMap<String, Integer>> studentSubjects = new HashMap<>();
+                for (Map.Entry<Student, HashMap<String, Object>> entry : studentData.entrySet()) {
+                    Student student = entry.getKey();
+                    HashMap<String, Object> studentInfo = entry.getValue();
+                    HashMap<String, Integer> subjects = (HashMap<String, Integer>) studentInfo.get("subjects");
+                    studentSubjects.put(student, subjects);
+                }
+                // Set subject data in the SubjectDataRepository
+                controller.setSubjectData(studentSubjects);
+
+                // Update the table data
                 updateTableData();
 
                 JOptionPane.showMessageDialog(null, "Data read successfully.");
             }
         });
+
 
         // Create new data
         new_data.addActionListener(new ActionListener() {

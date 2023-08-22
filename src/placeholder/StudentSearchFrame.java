@@ -97,12 +97,18 @@ public class StudentSearchFrame extends JFrame {
             } else {
                 // Search for student data here
                 DBHandler dbHandler = new DBHandler();
-                HashMap<Student, Double> data = dbHandler.readDataFromFile();
+                HashMap<Student, HashMap<String,Object>> data = dbHandler.readDataFromFile();
 
-                for (Map.Entry<Student, Double> entry : data.entrySet()) {
+                for (Map.Entry<Student, HashMap<String, Object>> entry : data.entrySet()) {
                     Student student = entry.getKey();
+                    HashMap<String, Object> studentData = entry.getValue();
+
                     if (student.getName().equalsIgnoreCase(name) && student.getSurname().equalsIgnoreCase(surname)) {
-                        StudentDetailsFrame detailsFrame = new StudentDetailsFrame(student, entry.getValue());
+                        Double averageGrade = (Double) studentData.get("averageGrade");
+                        @SuppressWarnings("unchecked")
+                        HashMap<String, Integer> subjects = (HashMap<String, Integer>) studentData.get("subjects");
+
+                        StudentDetailsFrame detailsFrame = new StudentDetailsFrame(student, averageGrade, subjects);
                         detailsFrame.setVisible(true);
                         dispose();
                         return;

@@ -159,7 +159,7 @@ public class SubjectFrame extends JFrame {
         });
 
         show_students.addActionListener(e -> {
-            System.out.println("==============AVERAGE GRADE DATA CHECK================");
+            System.out.println("===================DATA CHECK=====================");
             controller.printAverageGrades();
 
             TableFrame tableFrame = new TableFrame();

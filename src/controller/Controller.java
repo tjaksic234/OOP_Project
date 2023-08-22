@@ -91,6 +91,14 @@ public class Controller {
         return subjectDataRepository.getSubjectCount(student);
     }
 
+    public HashMap<Student, HashMap<String, Integer>> getSubjectData() {
+        return subjectDataRepository.getSubjectData();
+    }
+
+    public void setSubjectData(HashMap<Student, HashMap<String, Integer>> subjectData) {
+        subjectDataRepository.setSubjectData(subjectData);
+    }
+
     // Table details manager
 
     /**

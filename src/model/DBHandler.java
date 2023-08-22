@@ -16,7 +16,7 @@ public class DBHandler {
      *
      * @param data The data to be saved.
      */
-    public void saveDataToFile(HashMap<Student, Double> data) {
+    public void saveDataToFile(HashMap<Student, HashMap<String, Object>> data) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
@@ -28,30 +28,14 @@ public class DBHandler {
         }
     }
 
-    /**
-     * Reads data from a file and returns it as a HashMap of Students and their average grades.
-     *
-     * @return The HashMap containing the read data.
-     */
-    public HashMap<Student, Double> readDataFromFile() {
-        HashMap<Student, Double> data = new HashMap<>();
+    public HashMap<Student, HashMap<String, Object>> readDataFromFile() {
+        HashMap<Student, HashMap<String, Object>> data = new HashMap<>();
 
         try (FileInputStream fileInputStream = new FileInputStream(FILE_PATH);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
-            data = (HashMap<Student, Double>) objectInputStream.readObject();
+            data = (HashMap<Student, HashMap<String, Object>>) objectInputStream.readObject();
             System.out.println("Successfully read data from file");
-
-            // Print data to console for debugging
-            for (Map.Entry<Student, Double> entry : data.entrySet()) {
-                Student student = entry.getKey();
-                Double averageGrade = entry.getValue();
-                System.out.println("Name: " + student.getName());
-                System.out.println("Surname: " + student.getSurname());
-                System.out.println("College: " + student.getCollege());
-                System.out.println("Average Grade: " + averageGrade);
-                System.out.println();
-            }
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -59,4 +43,5 @@ public class DBHandler {
 
         return data;
     }
+
 }

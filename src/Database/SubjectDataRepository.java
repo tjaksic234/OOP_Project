@@ -50,6 +50,10 @@ public class SubjectDataRepository implements SubjectDataMethodHandler {
         return subjectMap;
     }
 
+    public void setSubjectData(HashMap<Student, HashMap<String, Integer>> subjectMap) {
+        this.subjectMap = subjectMap;
+    }
+
     /**
      * Retrieves the count of subjects associated with a specific student.
      *
