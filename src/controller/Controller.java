@@ -1,34 +1,35 @@
 package controller;
 
 import Database.StudentDataRepository;
-import Database.SubjectDataRepository;
-import Database.TableDataRepository;
+import Database.ExamDataRepository;
 import model.Student;
+import placeholder.RegisteredExamsRepository;
+import placeholder.GradeEvaluationRepository;
+import placeholder.Teacher;
+import placeholder.TeacherDataRepository;
 
 import java.util.HashMap;
+import java.util.List;
 
-/**
- * The Controller class manages the interaction between the data repositories and the application logic.
- * It provides methods to add and remove students, manage subject details, and perform calculations on table data.
- */
+
 public class Controller {
     private StudentDataRepository studentDataRepository;
-    private SubjectDataRepository subjectDataRepository;
-    private TableDataRepository tableDataRepository;
+    private TeacherDataRepository teacherDataRepository;
+    private ExamDataRepository examDataRepository;
+    private RegisteredExamsRepository registeredExamsRepository;
+    private GradeEvaluationRepository gradeEvaluationRepository;
 
-    /**
-     * Constructs a Controller object with the specified data repositories.
-     *
-     * @param studentDataRepository The repository for student data.
-     * @param subjectDataRepository The repository for subject data.
-     * @param tableDataRepository   The repository for table data.
-     */
-    public Controller(StudentDataRepository studentDataRepository, SubjectDataRepository subjectDataRepository,
-                      TableDataRepository tableDataRepository) {
+
+    public Controller(StudentDataRepository studentDataRepository, TeacherDataRepository teacherDataRepository,
+                      ExamDataRepository examDataRepository,
+                      RegisteredExamsRepository tableDataRepository,
+                      GradeEvaluationRepository gradeEvaluationRepository) {
 
         this.studentDataRepository = studentDataRepository;
-        this.subjectDataRepository = subjectDataRepository;
-        this.tableDataRepository = tableDataRepository;
+        this.teacherDataRepository = teacherDataRepository;
+        this.examDataRepository = examDataRepository;
+        this.registeredExamsRepository = tableDataRepository;
+        this.gradeEvaluationRepository = gradeEvaluationRepository;
     }
 
     // Student details manager
@@ -68,71 +69,71 @@ public class Controller {
         return studentDataRepository.getStudentAtIndex(index);
     }
 
-    // Subject details manager
-
     /**
-     * Adds a subject with the given name and grade to a specific student.
+     * Retrieves the list of students from the data repository.
      *
-     * @param student      The student to whom the subject is added.
-     * @param subject_name The name of the subject.
-     * @param grade        The grade obtained in the subject.
+     * @return The list of students.
      */
-    public void addSubject(Student student, String subject_name, int grade) {
-        subjectDataRepository.addSubject(student, subject_name, grade);
+    public List<Student> getStudentList() {
+        return studentDataRepository.getStudentData();
     }
 
-    /**
-     * Retrieves the count of subjects associated with a specific student.
-     *
-     * @param student The student for whom the subject count is retrieved.
-     * @return The count of subjects associated with the student.
-     */
-    public int getSubjectCount(Student student) {
-        return subjectDataRepository.getSubjectCount(student);
+    // Exam details manager
+
+    public void addExam(String exam_subject) {
+        examDataRepository.addExam(exam_subject);
     }
 
-    public HashMap<Student, HashMap<String, Integer>> getSubjectData() {
-        return subjectDataRepository.getSubjectData();
+    public List<String> getExamData() {
+        return examDataRepository.getExamData();
     }
 
-    public void setSubjectData(HashMap<Student, HashMap<String, Integer>> subjectData) {
-        subjectDataRepository.setSubjectData(subjectData);
+
+    // Teacher details manager
+
+    public void addTeacher(Teacher teacher) {
+        teacherDataRepository.addTeacher(teacher);
     }
 
-    // Table details manager
-
-    /**
-     * Calculates the average grades for each student based on the subject data.
-     */
-    public void averageGradeCalculator() {
-        HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.getSubjectData();
-        tableDataRepository.averageGradeCalculator(subjectMap);
+    public List<Teacher> getTeacherList() {
+        return teacherDataRepository.getTeacherList();
     }
 
-    /**
-     * Calculates the average grades for each student based on the subject data and prints them.
-     */
-    public void printAverageGrades() {
-        HashMap<Student, HashMap<String, Integer>> subjectMap = subjectDataRepository.getSubjectData();
-        tableDataRepository.averageGradeCalculator(subjectMap);
-        tableDataRepository.printAverageGrades();
+
+    // Results manager
+
+    public void addResult(Student student, String result) {
+        registeredExamsRepository.addResult(student, result);
     }
 
-    /**
-     * Retrieves a map of students and their corresponding average grades.
-     *
-     * @return The map of students and their average grades.
-     */
-    public HashMap<Student, Double> getAverageGrades() {
-        return tableDataRepository.getAverageGrades();
+    public HashMap<Student, List<String>> getRegisteredExams() {
+        return registeredExamsRepository.getRegisteredExams();
     }
 
-    /**
-     * Sets the map of students and their corresponding average grades.
-     *
-     * @param averageGradesMap The map of students and their average grades.
-     */
-    public void setAverageGrades(HashMap<Student, Double> averageGradesMap) {
-        tableDataRepository.setAverageGrades(averageGradesMap);
+    public void removeExamFromResult(Student student,String exam) {
+        registeredExamsRepository.removeExamFromResult(student, exam);
     }
+
+    public boolean duplicateExamCheck(Student student, String exam) {
+        return registeredExamsRepository.duplicateExamCheck(student, exam);
+    }
+
+    // Student Evaluation manager
+
+    public void addGrade(String student, int grade) {
+        gradeEvaluationRepository.addGrade(student, grade);
+    }
+
+    public HashMap<String, List<Integer>> getGradeData() {
+        return gradeEvaluationRepository.getGradeData();
+    }
+
+    public void removeGrade(String student, int grade) {
+        gradeEvaluationRepository.removeGrade(student, grade);
+    }
+
+    public boolean gradeExists(String student, int grade) {
+        return gradeEvaluationRepository.gradeExists(student, grade);
+    }
+
 }

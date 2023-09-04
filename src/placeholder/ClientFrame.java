@@ -1,11 +1,18 @@
 package placeholder;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ClientFrame extends JFrame {
 
     private JButton teacherButton, studentButton;
+    private JMenuBar menuBar;
+    private JMenu adminMenu;
+    private JMenuItem adminOption;
+
+    private Controller controller;
 
     public ClientFrame() {
         super("Login");
@@ -23,6 +30,12 @@ public class ClientFrame extends JFrame {
     public void init(){
         teacherButton = new JButton("Teacher");
         studentButton = new JButton("Student");
+        menuBar = new JMenuBar();
+        adminMenu = new JMenu("Admin");
+        adminOption = new JMenuItem("Login");
+
+        adminMenu.add(adminOption);
+        menuBar.add(adminMenu);
     }
 
     public void layoutSet(){
@@ -41,6 +54,10 @@ public class ClientFrame extends JFrame {
         // Add student button
         panel.add(studentButton);
 
+        // Add menu bar
+        setJMenuBar(menuBar);
+
+
         // Add panel to the frame
         add(panel);
     }
@@ -50,15 +67,32 @@ public class ClientFrame extends JFrame {
             TeacherLoginFrame teacherLoginFrame = new TeacherLoginFrame();
             dispose();
             System.out.println("Teacher button pressed");
+            teacherLoginFrame.setController(controller);
         });
 
         studentButton.addActionListener(e -> {
-            StudentSearchFrame studentSearchFrame = new StudentSearchFrame();
+            StudentLoginFrame studentLoginFrame = new StudentLoginFrame();
+            studentLoginFrame.setController(controller);
             dispose();
             System.out.println("Student button pressed");
         });
+
+        adminOption.addActionListener(e -> {
+            String masterPassword = JOptionPane.showInputDialog(this, "Enter Master Password:");
+            if (masterPassword != null && masterPassword.equals("q")) {
+                // You can perform admin actions here
+                JOptionPane.showMessageDialog(this, "Admin Login Successful!");
+                AdminFrame adminFrame = new AdminFrame();
+                adminFrame.setController(controller);
+                dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Admin Login Failed. Invalid Master Password.");
+            }
+        });
     }
 
-    //TODO add functionality to the StudentLoginFrame so it checks if the student is present in the database or not
-
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
 }

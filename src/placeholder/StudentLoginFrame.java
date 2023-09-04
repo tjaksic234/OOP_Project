@@ -1,21 +1,23 @@
 package placeholder;
 
+import controller.Controller;
 import model.DBHandler;
 import model.Student;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
-public class StudentSearchFrame extends JFrame {
+public class StudentLoginFrame extends JFrame {
 
     private JButton searchButton, backButton;
     private JTextField studentName, studentSurname;
     private JLabel studentNameLabel, studentSurnameLabel;
+    private Controller controller;
 
-    public StudentSearchFrame() {
-        super("Student Search");
+    public StudentLoginFrame() {
+        super("Student Login");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -28,7 +30,7 @@ public class StudentSearchFrame extends JFrame {
     }
 
     public void init() {
-        searchButton = new JButton("Search");
+        searchButton = new JButton("Login");
         backButton = new JButton("Back");
         studentName = new JTextField(15);
         studentSurname = new JTextField(15);
@@ -43,12 +45,12 @@ public class StudentSearchFrame extends JFrame {
         GridBagConstraints constraints = new GridBagConstraints();
 
         // Welcome label
-        JLabel label = new JLabel("Search for a student");
+        JLabel label = new JLabel("Welcome student");
         label.setFont(new Font("Arial", Font.BOLD, 28));
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 2;
-        constraints.insets = new Insets(0, 0, 20, 0); // Add some vertical spacing
+        constraints.insets = new Insets(0, 15, 20, 0); // Add some vertical spacing
         panel.add(label, constraints);
 
         // Student name label and text field
@@ -81,9 +83,11 @@ public class StudentSearchFrame extends JFrame {
 
     public void activateComps() {
         backButton.addActionListener(e -> {
-            new ClientFrame();
+            ClientFrame clientFrame = new ClientFrame();
             dispose();
             System.out.println("Back button pressed");
+            clientFrame.setController(controller);
+
         });
 
        searchButton.addActionListener(e -> {
@@ -95,28 +99,40 @@ public class StudentSearchFrame extends JFrame {
             } else if (!name.matches("[a-zA-Z]+") || !surname.matches("[a-zA-Z]+")) {
                 JOptionPane.showMessageDialog(null, "Name and surname must contain only letters", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // Search for student data here
-                DBHandler dbHandler = new DBHandler();
-                HashMap<Student, HashMap<String,Object>> data = dbHandler.readDataFromFile();
 
-                for (Map.Entry<Student, HashMap<String, Object>> entry : data.entrySet()) {
-                    Student student = entry.getKey();
-                    HashMap<String, Object> studentData = entry.getValue();
+                List<Student> studentList = controller.getStudentList();
 
+                boolean found = false;
+
+                for (Student student : studentList) {
                     if (student.getName().equalsIgnoreCase(name) && student.getSurname().equalsIgnoreCase(surname)) {
-                        Double averageGrade = (Double) studentData.get("averageGrade");
-                        @SuppressWarnings("unchecked")
-                        HashMap<String, Integer> subjects = (HashMap<String, Integer>) studentData.get("subjects");
+                        JOptionPane.showMessageDialog(null, "Student login successful:\nName: "
+                                + student.getName().toUpperCase() + "\nSurname: " +
+                                student.getSurname().toUpperCase(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                        found = true;
 
-                        StudentDetailsFrame detailsFrame = new StudentDetailsFrame(student, averageGrade, subjects);
-                        detailsFrame.setVisible(true);
+                        ExamSelectionFrame examSelectionFrame = new ExamSelectionFrame();
+                        examSelectionFrame.setController(controller);
+                        examSelectionFrame.setStudentNameLabel(student.getName(), student.getSurname());
+                        examSelectionFrame.setStudent(student);
+                        System.out.println("Opening");
                         dispose();
-                        return;
+
+                        break;
                     }
                 }
-                JOptionPane.showMessageDialog(null, "Student does not exist in the database.", "Error", JOptionPane.ERROR_MESSAGE);
+
+
+
+                if (!found) {
+                    JOptionPane.showMessageDialog(null, "No matching student found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
        });
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
 }

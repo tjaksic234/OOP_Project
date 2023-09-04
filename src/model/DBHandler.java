@@ -35,6 +35,13 @@ public class DBHandler {
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
             data = (HashMap<Student, HashMap<String, Object>>) objectInputStream.readObject();
+            for (Map.Entry<Student, HashMap<String, Object>> entry : data.entrySet()) {
+                Student student = entry.getKey();
+                HashMap<String, Object> studentData = entry.getValue();
+
+                System.out.println("Student: " + student.getName() + " " + student.getSurname());
+                System.out.println("Data: " + studentData);
+            }
             System.out.println("Successfully read data from file");
 
         } catch (IOException | ClassNotFoundException e) {

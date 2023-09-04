@@ -36,8 +36,7 @@ public class StudentDataRepository implements StudentDataMethodHandler {
     @Override
     public void getStudentList() {
         for (Student student : studentList) {
-            System.out.println("(Student: " + student.getName() + ", Surname: " + student.getSurname() +
-                    ", College: " + student.getCollege() + ")");
+            System.out.println("(Student: " + student.getName() + ", Surname: " + student.getSurname() + ")");
         }
     }
 

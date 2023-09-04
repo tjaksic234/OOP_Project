@@ -10,19 +10,16 @@ public class Student implements Serializable {
 
     private String name;
     private String surname;
-    private String college;
 
     /**
      * Constructs a Student object with the specified name, surname, and college.
      *
      * @param name    The student's name.
      * @param surname The student's surname.
-     * @param college The student's college.
      */
-    public Student(String name, String surname, String college) {
+    public Student(String name, String surname) {
         this.name = name;
         this.surname = surname;
-        this.college = college;
     }
 
     /**
@@ -43,14 +40,6 @@ public class Student implements Serializable {
         return surname;
     }
 
-    /**
-     * Returns the college of the student.
-     *
-     * @return The student's college.
-     */
-    public String getCollege() {
-        return college;
-    }
 
     @Override
     /**
@@ -62,7 +51,6 @@ public class Student implements Serializable {
         return "Student{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", college='" + college + '\'' +
                 '}';
     }
 
@@ -84,14 +72,7 @@ public class Student implements Serializable {
         this.surname = surname;
     }
 
-    /**
-     * Sets the college of the student.
-     *
-     * @param college The student's college.
-     */
-    public void setCollege(String college) {
-        this.college = college;
-    }
+
 
     @Override
     /**
@@ -105,8 +86,7 @@ public class Student implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
         return Objects.equals(name, student.name) &&
-                Objects.equals(surname, student.surname) &&
-                Objects.equals(college, student.college);
+                Objects.equals(surname, student.surname);
     }
 
     @Override
@@ -116,6 +96,6 @@ public class Student implements Serializable {
      * @return The hash code value.
      */
     public int hashCode() {
-        return Objects.hash(name, surname, college);
+        return Objects.hash(name, surname);
     }
 }

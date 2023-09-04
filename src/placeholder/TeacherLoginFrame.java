@@ -1,6 +1,6 @@
 package placeholder;
 
-import view.MainFrame;
+import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +12,8 @@ public class TeacherLoginFrame extends JFrame {
     private JTextField usernameField;
     private JButton backButton;
     private JCheckBox showPassword;
+
+    private Controller controller;
 
     public TeacherLoginFrame() {
         super("Teacher Login");
@@ -109,13 +111,10 @@ public class TeacherLoginFrame extends JFrame {
         add(panel);
     }
 
-
-
-
-
     public void activateComps() {
         backButton.addActionListener(e -> {
-            new ClientFrame();
+            ClientFrame clientFrame = new ClientFrame();
+            clientFrame.setController(controller);
             dispose();
             System.out.println("Back button pressed");
         });
@@ -130,17 +129,38 @@ public class TeacherLoginFrame extends JFrame {
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
-            String password = passwordField.getText();
+            String password = new String(passwordField.getPassword()); // Get the password as a String
 
-            if (username.equals("admin") && password.equals("admin")) {
+            // Loop through the teacherList and check credentials
+            boolean loginSuccessful = false;
+            Teacher loggedInTeacher = null;
+            for (Teacher teacher : controller.getTeacherList()) {
+                if (teacher.getUsername().equals(username) && teacher.getPassword().equals(password)) {
+                    loginSuccessful = true;
+                    loggedInTeacher = teacher;
+                    break;
+                }
+            }
+
+            if (loginSuccessful) {
                 JOptionPane.showMessageDialog(null, "Login successful");
-                new MainFrame();
+
+                GraderFrame graderFrame = new GraderFrame();
+                graderFrame.setController(controller);
+                graderFrame.setTeacher(loggedInTeacher.getName(), loggedInTeacher.getSurname(), loggedInTeacher.getSubject());
+                graderFrame.fillStudentsComboBox();
+                graderFrame.fillGradesComboBox();
+
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(null,"Invalid username or password!!!");
+                JOptionPane.showMessageDialog(null, "Invalid username or password!!!");
                 usernameField.setText("");
                 passwordField.setText("");
             }
         });
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }
