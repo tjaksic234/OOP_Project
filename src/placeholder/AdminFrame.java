@@ -150,7 +150,7 @@ public class AdminFrame extends JFrame {
                             + "Password: " + teacher.getPassword() + "\n" +
                             "Profession: " + teacher.getSubject() + "\n");
 
-                    controller.addExam(subject);
+                    controller.addExamInfo(subject);
                     clearTeacherFields();
                 } else {
                     JOptionPane.showMessageDialog(AdminFrame.this, "Please fill in all fields.");

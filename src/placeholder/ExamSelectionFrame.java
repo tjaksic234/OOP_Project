@@ -117,7 +117,6 @@ public class ExamSelectionFrame extends JFrame {
             }
         });
 
-        // Add action listener for Show Registered Exams Button
         showRegisteredExamsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,7 +159,7 @@ public class ExamSelectionFrame extends JFrame {
     }
 
     public void fillExamComboBox() {
-        List<String> exams = controller.getExamData();
+        List<String> exams = controller.getExamInfo();
 
         if (exams.isEmpty()) {
             registerTestButton.setEnabled(false);

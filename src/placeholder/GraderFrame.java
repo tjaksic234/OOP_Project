@@ -106,6 +106,7 @@ public class GraderFrame extends JFrame {
 
         registerGrade.addActionListener(e -> {
             String studentName = (String) studentsComboBox.getSelectedItem();
+            String subject = teacherSubject;
             String grade = (String) gradesComboBox.getSelectedItem();
 
             if (studentName.equals("Select student") || grade.equals("Select grade")) {
@@ -113,12 +114,17 @@ public class GraderFrame extends JFrame {
             } else if (grade.equals("Select grade")) {
                 textDisplay.append("Please select a valid grade!\n");
             } else {
+
                 int gradeInt = Integer.parseInt(grade);
-                if (controller.gradeExists(studentName, gradeInt)) {
-                    JOptionPane.showMessageDialog(null, "Grade " + grade + " already exists for student " + studentName + "!\n");
+                Student student = findStudent(studentName);
+
+
+                if (controller.gradeExists(student, subject, gradeInt)) {
+                    JOptionPane.showMessageDialog(null, "Grade " + grade + " is already registered for student "
+                            + studentName + "!\n");
                 } else {
-                    controller.addGrade(studentName, gradeInt);
-                    textDisplay.append("Registered grade " + grade + " for subject " + teacherSubject +
+                    controller.addGrade(student, subject, gradeInt);
+                    textDisplay.append("Registered grade " + grade + " for subject " + subject.toUpperCase() +
                             " for student " + studentName + "!\n");
                 }
             }
@@ -126,6 +132,7 @@ public class GraderFrame extends JFrame {
 
         removeGrade.addActionListener(e -> {
             String studentName = (String) studentsComboBox.getSelectedItem();
+            String subject = teacherSubject;
             String grade = (String) gradesComboBox.getSelectedItem();
 
             if (studentName.equals("Select student") || grade.equals("Select grade")) {
@@ -133,20 +140,41 @@ public class GraderFrame extends JFrame {
             } else if (grade.equals("Select grade")) {
                 textDisplay.append("Please select a valid grade!\n");
             } else {
+
                 int gradeInt = Integer.parseInt(grade);
-                if (!controller.gradeExists(studentName, gradeInt)) {
-                    JOptionPane.showMessageDialog(null, "Grade " + grade + " does not exist for student " + studentName + "!");
+                Student student = findStudent(studentName);
+
+                if (!controller.gradeExists(student, subject, gradeInt)) {
+                    JOptionPane.showMessageDialog(null, "Grade " + grade + " is not registered for student "
+                            + studentName + "!");
                 } else {
-                    controller.removeGrade(studentName, gradeInt);
-                    textDisplay.append("Removed grade for subject " + teacherSubject + " from student " + studentName + "!\n");
+                    controller.removeGrade(student, subject);
+                    textDisplay.append("Removed grade for subject " + subject.toUpperCase() + " from student " + studentName + "!\n");
                 }
             }
         });
 
 
 
+
         showResults.addActionListener(e -> {
-            //TODO add functionality so the results are displayed in a jtable in the new frame
+            HashMap<Student, HashMap<String, Integer>> gradeData = controller.getGradeData();
+
+            if (gradeData.isEmpty()) {
+                textDisplay.append("No grades registered!\n");
+            } else {
+                textDisplay.append("Info:\n");
+                for (Student student : gradeData.keySet()) {
+                    HashMap<String, Integer> studentGrades = gradeData.get(student);
+
+                    if (studentGrades != null) {
+                        for (String subject : studentGrades.keySet()) {
+                            int grade = studentGrades.get(subject);
+                            textDisplay.append(student.getName() + " " + student.getSurname() + " " + subject + " " + grade + "\n");
+                        }
+                    }
+                }
+            }
         });
 
         clearDisplay.addActionListener(e -> {
@@ -185,6 +213,19 @@ public class GraderFrame extends JFrame {
         }
     }
 
+    public Student findStudent(String studentName) {
+        HashMap<Student, List<String>> studentExams = controller.getRegisteredExams();
+
+        for (Student student : studentExams.keySet()) {
+            if ((student.getName() + " " + student.getSurname()).equals(studentName)) {
+                System.out.println("Found student: " + student.getName() + " " + student.getSurname());
+                return student;
+            }
+        }
+
+        return null;
+    }
+
     public void fillGradesComboBox() {
         gradesComboBox.removeAllItems();
         gradesComboBox.addItem("Select grade");
@@ -201,8 +242,8 @@ public class GraderFrame extends JFrame {
         this.teacherSurname = surname;
         this.teacherSubject = subject;
 
-        professorLabel.setText(name + " " + surname);
-        subjectLabel.setText(subject);
+        professorLabel.setText(name.toUpperCase() + " " + surname.toUpperCase());
+        subjectLabel.setText(subject.toUpperCase());
     }
 
     public void setController(Controller controller) {

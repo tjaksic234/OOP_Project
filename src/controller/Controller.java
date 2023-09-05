@@ -1,7 +1,7 @@
 package controller;
 
 import Database.StudentDataRepository;
-import Database.ExamDataRepository;
+import Database.ExamInformationRepository;
 import model.Student;
 import placeholder.RegisteredExamsRepository;
 import placeholder.GradeEvaluationRepository;
@@ -15,19 +15,19 @@ import java.util.List;
 public class Controller {
     private StudentDataRepository studentDataRepository;
     private TeacherDataRepository teacherDataRepository;
-    private ExamDataRepository examDataRepository;
+    private ExamInformationRepository examInformationRepository;
     private RegisteredExamsRepository registeredExamsRepository;
     private GradeEvaluationRepository gradeEvaluationRepository;
 
 
     public Controller(StudentDataRepository studentDataRepository, TeacherDataRepository teacherDataRepository,
-                      ExamDataRepository examDataRepository,
+                      ExamInformationRepository examInformationRepository,
                       RegisteredExamsRepository tableDataRepository,
                       GradeEvaluationRepository gradeEvaluationRepository) {
 
         this.studentDataRepository = studentDataRepository;
         this.teacherDataRepository = teacherDataRepository;
-        this.examDataRepository = examDataRepository;
+        this.examInformationRepository = examInformationRepository;
         this.registeredExamsRepository = tableDataRepository;
         this.gradeEvaluationRepository = gradeEvaluationRepository;
     }
@@ -80,12 +80,12 @@ public class Controller {
 
     // Exam details manager
 
-    public void addExam(String exam_subject) {
-        examDataRepository.addExam(exam_subject);
+    public void addExamInfo(String exam_subject) {
+        examInformationRepository.addExamInfo(exam_subject);
     }
 
-    public List<String> getExamData() {
-        return examDataRepository.getExamData();
+    public List<String> getExamInfo() {
+        return examInformationRepository.getExamInfo();
     }
 
 
@@ -100,7 +100,7 @@ public class Controller {
     }
 
 
-    // Results manager
+    // Registered exams manager
 
     public void addResult(Student student, String result) {
         registeredExamsRepository.addResult(student, result);
@@ -120,20 +120,20 @@ public class Controller {
 
     // Student Evaluation manager
 
-    public void addGrade(String student, int grade) {
-        gradeEvaluationRepository.addGrade(student, grade);
+    public void addGrade(Student student, String subject, int grade) {
+        gradeEvaluationRepository.addGrade(student, subject, grade);
     }
 
-    public HashMap<String, List<Integer>> getGradeData() {
+    public HashMap<Student, HashMap<String, Integer>> getGradeData() {
         return gradeEvaluationRepository.getGradeData();
     }
 
-    public void removeGrade(String student, int grade) {
-        gradeEvaluationRepository.removeGrade(student, grade);
+    public void removeGrade(Student student, String subject) {
+        gradeEvaluationRepository.removeGrade(student, subject);
     }
 
-    public boolean gradeExists(String student, int grade) {
-        return gradeEvaluationRepository.gradeExists(student, grade);
+    public boolean gradeExists(Student student, String subject, int grade) {
+        return gradeEvaluationRepository.gradeExists(student, subject, grade);
     }
 
 }

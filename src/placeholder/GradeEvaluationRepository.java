@@ -1,50 +1,46 @@
 package placeholder;
 
+import model.Student;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GradeEvaluationRepository {
 
-    private HashMap<String, List<Integer>> gradeData;
+    private HashMap<Student, HashMap<String, Integer>> gradeData;
 
     public GradeEvaluationRepository() {
         gradeData = new HashMap<>();
     }
 
-    public void addGrade(String student, int grade) {
-        List<Integer> results = gradeData.get(student);
-        if (results == null) {
-            results = new ArrayList<>();
-            gradeData.put(student, results);
+    public void addGrade(Student student, String subject, int grade) {
+        HashMap<String, Integer> studentGrades = gradeData.get(student);
+
+        if (studentGrades == null) {
+            studentGrades = new HashMap<>();
+            gradeData.put(student, studentGrades);
         }
-        results.add(grade);
+
+        studentGrades.put(subject, grade);
     }
 
-    public HashMap<String, List<Integer>> getGradeData() {
+    public HashMap<Student, HashMap<String, Integer>> getGradeData() {
         return gradeData;
     }
 
-    public void removeGrade(String student, int gradeToRemove) {
-        List<Integer> results = gradeData.get(student);
-        if (results != null) {
-            if (results.contains(gradeToRemove)) {
-                results.remove(Integer.valueOf(gradeToRemove));
-            }
+    public void removeGrade(Student student, String subject) {
+        HashMap<String, Integer> studentGrades = gradeData.get(student);
+
+        if (studentGrades != null) {
+            studentGrades.remove(subject);
         }
     }
 
+    public boolean gradeExists(Student student, String subject, int grade) {
+        HashMap<String, Integer> studentGrades = gradeData.get(student);
 
-    public boolean gradeExists(String student, int grade) {
-        List<Integer> grades = gradeData.get(student);
-        if (grades == null) {
-            return false;
-        } else {
-            return grades.contains(grade);
-
-        }
+        return studentGrades != null && studentGrades.containsKey(subject) && studentGrades.get(subject) == grade;
     }
-
-
-
 }
