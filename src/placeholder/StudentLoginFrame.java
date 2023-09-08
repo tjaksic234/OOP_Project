@@ -1,12 +1,10 @@
 package placeholder;
 
 import controller.Controller;
-import model.DBHandler;
 import model.Student;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 public class StudentLoginFrame extends JFrame {
@@ -111,10 +109,10 @@ public class StudentLoginFrame extends JFrame {
                                 student.getSurname().toUpperCase(), "Success", JOptionPane.INFORMATION_MESSAGE);
                         found = true;
 
-                        ExamSelectionFrame examSelectionFrame = new ExamSelectionFrame();
-                        examSelectionFrame.setController(controller);
-                        examSelectionFrame.setStudentNameLabel(student.getName(), student.getSurname());
-                        examSelectionFrame.setStudent(student);
+                        ExamPickerFrame examPickerFrame = new ExamPickerFrame();
+                        examPickerFrame.setController(controller);
+                        examPickerFrame.setStudentNameLabel(student.getName(), student.getSurname());
+                        examPickerFrame.setStudent(student);
                         System.out.println("Opening");
                         dispose();
 

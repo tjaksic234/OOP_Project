@@ -1,9 +1,8 @@
 package controller;
 
+import Database.ExamInfoRepository;
 import Database.StudentDataRepository;
-import Database.ExamInformationRepository;
 import model.Student;
-import placeholder.RegisteredExamsRepository;
 import placeholder.GradeEvaluationRepository;
 import placeholder.Teacher;
 import placeholder.TeacherDataRepository;
@@ -15,20 +14,17 @@ import java.util.List;
 public class Controller {
     private StudentDataRepository studentDataRepository;
     private TeacherDataRepository teacherDataRepository;
-    private ExamInformationRepository examInformationRepository;
-    private RegisteredExamsRepository registeredExamsRepository;
+    private ExamInfoRepository examInfoRepository;
     private GradeEvaluationRepository gradeEvaluationRepository;
 
 
     public Controller(StudentDataRepository studentDataRepository, TeacherDataRepository teacherDataRepository,
-                      ExamInformationRepository examInformationRepository,
-                      RegisteredExamsRepository tableDataRepository,
+                      ExamInfoRepository examInfoRepository,
                       GradeEvaluationRepository gradeEvaluationRepository) {
 
         this.studentDataRepository = studentDataRepository;
         this.teacherDataRepository = teacherDataRepository;
-        this.examInformationRepository = examInformationRepository;
-        this.registeredExamsRepository = tableDataRepository;
+        this.examInfoRepository = examInfoRepository;
         this.gradeEvaluationRepository = gradeEvaluationRepository;
     }
 
@@ -81,11 +77,11 @@ public class Controller {
     // Exam details manager
 
     public void addExamInfo(String exam_subject) {
-        examInformationRepository.addExamInfo(exam_subject);
+        examInfoRepository.addExamInfo(exam_subject);
     }
 
     public List<String> getExamInfo() {
-        return examInformationRepository.getExamInfo();
+        return examInfoRepository.getExamInfo();
     }
 
 
@@ -97,25 +93,6 @@ public class Controller {
 
     public List<Teacher> getTeacherList() {
         return teacherDataRepository.getTeacherList();
-    }
-
-
-    // Registered exams manager
-
-    public void addResult(Student student, String result) {
-        registeredExamsRepository.addResult(student, result);
-    }
-
-    public HashMap<Student, List<String>> getRegisteredExams() {
-        return registeredExamsRepository.getRegisteredExams();
-    }
-
-    public void removeExamFromResult(Student student,String exam) {
-        registeredExamsRepository.removeExamFromResult(student, exam);
-    }
-
-    public boolean duplicateExamCheck(Student student, String exam) {
-        return registeredExamsRepository.duplicateExamCheck(student, exam);
     }
 
     // Student Evaluation manager

@@ -1,6 +1,6 @@
 package placeholder;
 
-import Database.ExamInformationRepository;
+import Database.ExamInfoRepository;
 import Database.StudentDataRepository;
 import controller.Controller;
 
@@ -10,7 +10,7 @@ public class adminTest {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Controller controller = new Controller(new StudentDataRepository(), new TeacherDataRepository(),
-                    new ExamInformationRepository(), new RegisteredExamsRepository(), new GradeEvaluationRepository());
+                    new ExamInfoRepository(), new GradeEvaluationRepository());
 
             ClientFrame clientFrame = new ClientFrame();
             clientFrame.setController(controller);

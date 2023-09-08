@@ -118,8 +118,9 @@ public class GraderFrame extends JFrame {
                 int gradeInt = Integer.parseInt(grade);
                 Student student = findStudent(studentName);
 
-
-                if (controller.gradeExists(student, subject, gradeInt)) {
+                if (student == null) {
+                    JOptionPane.showMessageDialog(null, "Student not found!");
+                } else if (controller.gradeExists(student, subject, gradeInt) && gradeInt != 0) {
                     JOptionPane.showMessageDialog(null, "Grade " + grade + " is already registered for student "
                             + studentName + "!\n");
                 } else {
@@ -144,7 +145,9 @@ public class GraderFrame extends JFrame {
                 int gradeInt = Integer.parseInt(grade);
                 Student student = findStudent(studentName);
 
-                if (!controller.gradeExists(student, subject, gradeInt)) {
+                if (student == null) {
+                    JOptionPane.showMessageDialog(null, "Student not found!");
+                } else if (!controller.gradeExists(student, subject, gradeInt)) {
                     JOptionPane.showMessageDialog(null, "Grade " + grade + " is not registered for student "
                             + studentName + "!");
                 } else {
@@ -161,16 +164,16 @@ public class GraderFrame extends JFrame {
             HashMap<Student, HashMap<String, Integer>> gradeData = controller.getGradeData();
 
             if (gradeData.isEmpty()) {
-                textDisplay.append("No grades registered!\n");
+                JOptionPane.showMessageDialog(null, "No grades registered!");
             } else {
-                textDisplay.append("Info:\n");
+                System.out.println("Info:\n");
                 for (Student student : gradeData.keySet()) {
                     HashMap<String, Integer> studentGrades = gradeData.get(student);
 
                     if (studentGrades != null) {
                         for (String subject : studentGrades.keySet()) {
                             int grade = studentGrades.get(subject);
-                            textDisplay.append(student.getName() + " " + student.getSurname() + " " + subject + " " + grade + "\n");
+                            System.out.println(student.getName() + " " + student.getSurname() + " " + subject + " " + grade + "\n");
                         }
                     }
                 }
@@ -184,13 +187,13 @@ public class GraderFrame extends JFrame {
     }
 
     public void fillStudentsComboBox() {
-        HashMap<Student, List<String>> studentExams = controller.getRegisteredExams();
+        HashMap<Student, HashMap<String, Integer>> gradeData = controller.getGradeData();
 
-        if (studentExams.isEmpty()) {
+        if (gradeData.isEmpty()) {
             registerGrade.setEnabled(false);
             removeGrade.setEnabled(false);
             studentsComboBox.addItem("No students registered");
-        }else {
+        } else {
             registerGrade.setEnabled(true);
             removeGrade.setEnabled(true);
         }
@@ -199,32 +202,42 @@ public class GraderFrame extends JFrame {
 
         studentsComboBox.removeAllItems();
         studentsComboBox.addItem("Select student");
-        for (Student student : studentExams.keySet()) {
-            List<String> exams = studentExams.get(student);
 
-            if (exams != null) {
-                for (String exam : exams) {
-                    if (exam.toLowerCase().equals(teacherSubjectLowerCase)) {
-                        studentsComboBox.addItem(student.getName() + " " + student.getSurname());
+        for (Student student : gradeData.keySet()) {
+            HashMap<String, Integer> grades = gradeData.get(student);
+
+            if (grades != null) {
+                boolean hasSubject = false;
+                for (String subject : grades.keySet()) {
+                    if (subject.equalsIgnoreCase(teacherSubjectLowerCase)) {
+                        hasSubject = true;
                         break;
                     }
+                }
+
+                if (hasSubject) {
+                    System.out.println("Adding student: " + student.getName() + " " + student.getSurname());
+                    studentsComboBox.addItem(student.getName() + " " + student.getSurname());
+                } else {
+                    System.out.println("Student not added: " + student.getName() + " " + student.getSurname());
                 }
             }
         }
     }
 
-    public Student findStudent(String studentName) {
-        HashMap<Student, List<String>> studentExams = controller.getRegisteredExams();
 
-        for (Student student : studentExams.keySet()) {
+    public Student findStudent(String studentName) {
+        HashMap<Student, HashMap<String, Integer>> gradeData = controller.getGradeData();
+
+        for (Student student : gradeData.keySet()) {
             if ((student.getName() + " " + student.getSurname()).equals(studentName)) {
-                System.out.println("Found student: " + student.getName() + " " + student.getSurname());
                 return student;
             }
         }
 
         return null;
     }
+
 
     public void fillGradesComboBox() {
         gradesComboBox.removeAllItems();
@@ -250,7 +263,4 @@ public class GraderFrame extends JFrame {
         this.controller = controller;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GraderFrame());
-    }
 }

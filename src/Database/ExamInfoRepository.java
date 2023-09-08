@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ExamInformationRepository {
+public class ExamInfoRepository {
 
     private List<String> examInfo;
 
 
-    public ExamInformationRepository() {
+    public ExamInfoRepository() {
         examInfo = new ArrayList<>();
     }
 

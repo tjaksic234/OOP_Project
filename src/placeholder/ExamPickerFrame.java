@@ -9,10 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ExamSelectionFrame extends JFrame {
+public class ExamPickerFrame extends JFrame {
 
     private JComboBox<String> availableExamsComboBox;
-    private JButton registerTestButton, showRegisteredExamsButton, removeExamButton;
+    private JButton registerExamButton, showRegisteredExamsButton, removeExamButton;
     private JLabel studentNameLabel;
     private JMenuBar menuBar;
     private JMenu menu;
@@ -20,9 +20,9 @@ public class ExamSelectionFrame extends JFrame {
     private Controller controller;
     private Student student;
 
-    public ExamSelectionFrame() {
+    public ExamPickerFrame() {
         super("Exam Selection");
-        setSize(400, 400); // Smaller frame size
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -35,7 +35,7 @@ public class ExamSelectionFrame extends JFrame {
 
     public void init() {
         availableExamsComboBox = new JComboBox<>();
-        registerTestButton = new JButton("Register Test");
+        registerExamButton = new JButton("Register Test");
         showRegisteredExamsButton = new JButton("Show results");
         removeExamButton = new JButton("Remove Exam");
         studentNameLabel = new JLabel();
@@ -70,16 +70,16 @@ public class ExamSelectionFrame extends JFrame {
 
         JPanel buttonPanel1 = new JPanel(new GridLayout(1, 2));
 
-        registerTestButton.setPreferredSize(new Dimension(150, 40));
-        buttonPanel1.add(registerTestButton);
+        registerExamButton.setPreferredSize(new Dimension(150, 40));
+        buttonPanel1.add(registerExamButton);
 
-        showRegisteredExamsButton.setPreferredSize(new Dimension(150, 40));
-        buttonPanel1.add(showRegisteredExamsButton);
+        removeExamButton.setPreferredSize(new Dimension(150, 40));
+        buttonPanel1.add(removeExamButton);
 
         JPanel buttonPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        removeExamButton.setPreferredSize(new Dimension(150, 40));
-        buttonPanel2.add(removeExamButton);
+        showRegisteredExamsButton.setPreferredSize(new Dimension(150, 40));
+        buttonPanel2.add(showRegisteredExamsButton);
 
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -90,27 +90,21 @@ public class ExamSelectionFrame extends JFrame {
         constraints.gridy = 3;
         panel.add(buttonPanel2, constraints);
 
-
-
         setJMenuBar(menuBar);
-
         add(panel);
     }
 
-
-
-
     public void activateComps() {
-        registerTestButton.addActionListener(new ActionListener() {
+        registerExamButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (availableExamsComboBox.getSelectedIndex() == 0) {
                     JOptionPane.showMessageDialog(null, "Please select an exam");
-                } else if (controller.duplicateExamCheck(student, (String) availableExamsComboBox.getSelectedItem())) {
+                } else if (controller.gradeExists(student,(String) availableExamsComboBox.getSelectedItem(), 0)) {
                     JOptionPane.showMessageDialog(null, "Exam is already registered");
                 } else {
-                    controller.addResult(student, (String) availableExamsComboBox.getSelectedItem());
-                    System.out.println("Added exam:" + availableExamsComboBox.getSelectedItem() + " for student "
+                    controller.addGrade(student, (String) availableExamsComboBox.getSelectedItem(), 0);
+                    System.out.println("Added exam: " + availableExamsComboBox.getSelectedItem() + " for student "
                             + student.getName() + " " + student.getSurname());
                     JOptionPane.showMessageDialog(null, "Exam registered successfully");
                 }
@@ -120,9 +114,13 @@ public class ExamSelectionFrame extends JFrame {
         showRegisteredExamsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add your code to show registered exams here
-                // You can fetch and display the exams from the database
-                // Display the exams in a dialog or another frame
+                JOptionPane.showMessageDialog(null, "Proceeding to the results page");
+                StudentReportFrame studentReportFrame = new StudentReportFrame();
+                studentReportFrame.setController(controller);
+                studentReportFrame.setStudent(student);
+                studentReportFrame.setAverageGrade();
+                studentReportFrame.setTableData();
+                dispose();
             }
         });
 
@@ -131,15 +129,14 @@ public class ExamSelectionFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (availableExamsComboBox.getSelectedIndex() == 0) {
                     JOptionPane.showMessageDialog(null, "Please select an exam to remove");
-                } else if (controller.getRegisteredExams().get(student) == null) {
+                } else if (!controller.gradeExists(student,(String) availableExamsComboBox.getSelectedItem(), 0)) {
                     JOptionPane.showMessageDialog(null, "Exam is not registered for the student");
                 } else {
-                    controller.removeExamFromResult(student, (String) availableExamsComboBox.getSelectedItem());
+                    controller.removeGrade(student, (String) availableExamsComboBox.getSelectedItem());
                     System.out.println("Removed exam: " + availableExamsComboBox.getSelectedItem() + " for student "
                             + student.getName() + " " + student.getSurname());
                     JOptionPane.showMessageDialog(null, "Exam removed successfully");
                 }
-
             }
         });
 
@@ -149,6 +146,7 @@ public class ExamSelectionFrame extends JFrame {
                 StudentLoginFrame studentLoginFrame = new StudentLoginFrame();
                 studentLoginFrame.setController(controller);
                 JOptionPane.showMessageDialog(null, "Logged out successfully");
+                System.out.println("Registered" + controller.getGradeData());
                 dispose();
             }
         });
@@ -162,12 +160,12 @@ public class ExamSelectionFrame extends JFrame {
         List<String> exams = controller.getExamInfo();
 
         if (exams.isEmpty()) {
-            registerTestButton.setEnabled(false);
+            registerExamButton.setEnabled(false);
             showRegisteredExamsButton.setEnabled(false);
             removeExamButton.setEnabled(false);
             availableExamsComboBox.addItem("No exams available");
         } else {
-            registerTestButton.setEnabled(true);
+            registerExamButton.setEnabled(true);
             showRegisteredExamsButton.setEnabled(true);
             removeExamButton.setEnabled(true);
         }
@@ -188,4 +186,6 @@ public class ExamSelectionFrame extends JFrame {
     public void setStudent(Student student) {
         this.student = student;
     }
+
+
 }

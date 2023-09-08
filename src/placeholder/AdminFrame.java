@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class AdminFrame extends JFrame {
 
@@ -64,7 +65,6 @@ public class AdminFrame extends JFrame {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Student Input Panel
         JPanel studentPanel = new JPanel(new GridLayout(2, 10, 30, 10));
         studentPanel.setBorder(BorderFactory.createTitledBorder("Student Information"));
 
@@ -75,7 +75,6 @@ public class AdminFrame extends JFrame {
 
         contentPanel.add(studentPanel, gbc);
 
-        // Teacher Input Panel
         JPanel teacherPanel = new JPanel(new GridLayout(4, 10, 30, 10));
         teacherPanel.setBorder(BorderFactory.createTitledBorder("Teacher Information"));
 
@@ -103,15 +102,13 @@ public class AdminFrame extends JFrame {
         buttonPanel.add(saveTeacherButton);
         buttonPanel.add(saveStudentButton);
 
-        // Set the weightx for the student and teacher panels
         gbc.weightx = 0.5;
 
-        // Data Display Area (on the right)
         JScrollPane scrollPane = new JScrollPane(dataDisplayArea);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Data Display"));
-        gbc.gridx = 1; // Move to column 1
-        gbc.gridy = 0; // Reset to row 0
-        gbc.gridheight = 3; // Span 3 rows
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 3;
         gbc.fill = GridBagConstraints.BOTH;
         contentPanel.add(scrollPane, gbc);
 
@@ -134,26 +131,32 @@ public class AdminFrame extends JFrame {
                 String password = teacherPasswordField.getText();
                 String subject = teacherSubjectField.getText();
 
-                if (!name.isEmpty() && !surname.isEmpty() && !password.isEmpty() && !subject.isEmpty()) {
-
-                    Teacher teacher = new Teacher(name, surname, password, subject);
+                if (name.isEmpty() && surname.isEmpty() && password.isEmpty() && subject.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill in all fields.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!isAlpha(name) || !isAlpha(surname) || !isAlpha(subject)) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid name, surname and subject.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (isDuplicateTeacher(name, surname, subject)) {
+                    JOptionPane.showMessageDialog(null, "This teacher already exists.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    Teacher teacher = new Teacher(name, surname, password, subject.toUpperCase());
                     controller.addTeacher(teacher);
 
                     dataDisplayArea.append("##### TEACHER ADDED #####\n");
-                    dataDisplayArea.append("Teacher: " + teacher.getName() + " " + teacher.getSurname()  +
+                    dataDisplayArea.append("Teacher: " + teacher.getName() + " " + teacher.getSurname() +
                             "\n" + "E-mail: " + teacher.getUsername() + "\n"
                             + "Password: " + teacher.getPassword() + "\n" +
                             "Profession: " + teacher.getSubject() + "\n");
 
-                    System.out.println("Teacher: " + teacher.getName() + " " + teacher.getSurname()  +
+                    System.out.println("Teacher: " + teacher.getName() + " " + teacher.getSurname() +
                             "\n" + "E-mail: " + teacher.getUsername() + "\n"
                             + "Password: " + teacher.getPassword() + "\n" +
                             "Profession: " + teacher.getSubject() + "\n");
 
                     controller.addExamInfo(subject);
                     clearTeacherFields();
-                } else {
-                    JOptionPane.showMessageDialog(AdminFrame.this, "Please fill in all fields.");
                 }
             }
         });
@@ -164,15 +167,22 @@ public class AdminFrame extends JFrame {
                 String name = studentNameField.getText();
                 String surname = studentSurnameField.getText();
 
-                if (!name.isEmpty() && !surname.isEmpty()) {
+                if (name.isEmpty() && surname.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill in all fields.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!isAlpha(name) || !isAlpha(surname)){
+                    JOptionPane.showMessageDialog(null, "Please enter a valid name and surname.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (isDuplicateStudent(name, surname)) {
+                    JOptionPane.showMessageDialog(null, "This student already exists.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
                     Student student = new Student(name, surname);
                     controller.addStudent(student);
                     dataDisplayArea.append("##### STUDENT ADDED #####\n");
                     dataDisplayArea.append("Student: " + student.getName() + " " + student.getSurname() + "\n");
                     System.out.println("Student: " + student.getName() + " " + student.getSurname() + "\n");
                     clearStudentFields();
-                } else {
-                    JOptionPane.showMessageDialog(AdminFrame.this, "Please fill in all fields.");
                 }
             }
         });
@@ -202,6 +212,36 @@ public class AdminFrame extends JFrame {
     public void setController(Controller controller) {
         this.controller = controller;
     }
+
+    private boolean isAlpha(String str) {
+        return str != null && str.matches("^[a-zA-Z\\s]+$");
+    }
+
+    private boolean isDuplicateTeacher(String name, String surname, String subject) {
+        List<Teacher> addedTeachers = controller.getTeacherList();
+        for (Teacher teacher : addedTeachers) {
+            if (teacher.getName().equals(name) && teacher.getSurname().equalsIgnoreCase(surname)
+                    && teacher.getSubject().equalsIgnoreCase(subject)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isDuplicateStudent(String name, String surname) {
+        List<Student> addedStudents = controller.getStudentList();
+        for (Student student : addedStudents) {
+            if (student.getName().equalsIgnoreCase(name) && student.getSurname().equalsIgnoreCase(surname)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
 }
 
 

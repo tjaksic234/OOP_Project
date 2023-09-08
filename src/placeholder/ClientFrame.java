@@ -79,8 +79,7 @@ public class ClientFrame extends JFrame {
 
         adminOption.addActionListener(e -> {
             String masterPassword = JOptionPane.showInputDialog(this, "Enter Master Password:");
-            if (masterPassword != null && masterPassword.equals("q")) {
-                // You can perform admin actions here
+            if (masterPassword != null && masterPassword.equals("admin")) {
                 JOptionPane.showMessageDialog(this, "Admin Login Successful!");
                 AdminFrame adminFrame = new AdminFrame();
                 adminFrame.setController(controller);

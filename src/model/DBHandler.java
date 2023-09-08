@@ -1,54 +1,32 @@
 package model;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import controller.Controller;
 
-/**
- * The DBHandler class is responsible for saving and reading data to/from a file.
- */
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 public class DBHandler {
 
     private static final String FILE_PATH = "Projekt/src/Storage/data.bin";
+    private Controller controller;
 
-    /**
-     * Saves the provided data to a file.
-     *
-     * @param data The data to be saved.
-     */
-    public void saveDataToFile(HashMap<Student, HashMap<String, Object>> data) {
+    public void saveData() {
         try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
-            objectOutputStream.writeObject(data);
-            System.out.println("Successfully saved data to file");
+            objectOutputStream.writeObject(controller);
+
+            System.out.println("Data saved successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Error while saving data.");
         }
     }
 
-    public HashMap<Student, HashMap<String, Object>> readDataFromFile() {
-        HashMap<Student, HashMap<String, Object>> data = new HashMap<>();
-
-        try (FileInputStream fileInputStream = new FileInputStream(FILE_PATH);
-             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-
-            data = (HashMap<Student, HashMap<String, Object>>) objectInputStream.readObject();
-            for (Map.Entry<Student, HashMap<String, Object>> entry : data.entrySet()) {
-                Student student = entry.getKey();
-                HashMap<String, Object> studentData = entry.getValue();
-
-                System.out.println("Student: " + student.getName() + " " + student.getSurname());
-                System.out.println("Data: " + studentData);
-            }
-            System.out.println("Successfully read data from file");
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return data;
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
-
 }
