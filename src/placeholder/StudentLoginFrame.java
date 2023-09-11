@@ -51,21 +51,18 @@ public class StudentLoginFrame extends JFrame {
         constraints.insets = new Insets(0, 15, 20, 0); // Add some vertical spacing
         panel.add(label, constraints);
 
-        // Student name label and text field
         constraints.gridwidth = 1;
         constraints.gridy = 1;
         panel.add(studentNameLabel, constraints);
         constraints.gridx = 1;
         panel.add(studentName, constraints);
 
-        // Student surname label and text field
         constraints.gridx = 0;
         constraints.gridy = 2;
         panel.add(studentSurnameLabel, constraints);
         constraints.gridx = 1;
         panel.add(studentSurname, constraints);
 
-        // Search and Back buttons
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
@@ -75,7 +72,6 @@ public class StudentLoginFrame extends JFrame {
         buttonPanel.add(searchButton);
         panel.add(buttonPanel, constraints);
 
-        // Add panel to the frame
         add(panel);
     }
 
@@ -109,13 +105,12 @@ public class StudentLoginFrame extends JFrame {
                                 student.getSurname().toUpperCase(), "Success", JOptionPane.INFORMATION_MESSAGE);
                         found = true;
 
-                        ExamPickerFrame examPickerFrame = new ExamPickerFrame();
-                        examPickerFrame.setController(controller);
-                        examPickerFrame.setStudentNameLabel(student.getName(), student.getSurname());
-                        examPickerFrame.setStudent(student);
-                        System.out.println("Opening");
+                        StudentReportFrame studentReportFrame = new StudentReportFrame();
+                        studentReportFrame.setController(controller);
+                        studentReportFrame.setStudent(student);
+                        studentReportFrame.setTableData();
+                        studentReportFrame.setAverageGrade();
                         dispose();
-
                         break;
                     }
                 }

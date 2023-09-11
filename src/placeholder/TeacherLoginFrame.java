@@ -4,6 +4,9 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TeacherLoginFrame extends JFrame {
 
@@ -129,27 +132,36 @@ public class TeacherLoginFrame extends JFrame {
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
-            String password = new String(passwordField.getPassword()); // Get the password as a String
+            String password = new String(passwordField.getPassword());
 
-            // Loop through the teacherList and check credentials
             boolean loginSuccessful = false;
+            int teacherProfessionSize = 0;
             Teacher loggedInTeacher = null;
-            for (Teacher teacher : controller.getTeacherList()) {
+
+            for (Map.Entry<Teacher, List<String>> entry : controller.getTeacherMap().entrySet()) {
+                Teacher teacher = entry.getKey();
+                List<String> teacherData = entry.getValue();
+
                 if (teacher.getUsername().equals(username) && teacher.getPassword().equals(password)) {
+                    teacherProfessionSize = teacherData.size();
                     loginSuccessful = true;
                     loggedInTeacher = teacher;
                     break;
                 }
             }
 
-            if (loginSuccessful) {
-                JOptionPane.showMessageDialog(null, "Login successful");
 
-                GraderFrame graderFrame = new GraderFrame();
-                graderFrame.setController(controller);
-                graderFrame.setTeacher(loggedInTeacher.getName(), loggedInTeacher.getSurname(), loggedInTeacher.getSubject());
-                graderFrame.fillStudentsComboBox();
-                graderFrame.fillGradesComboBox();
+            if (loginSuccessful) {
+                if (teacherProfessionSize > 1) {
+                    showSubjectSelectionPrompt(loggedInTeacher);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Login successful");
+                    GraderFrame graderFrame = new GraderFrame();
+                    graderFrame.setController(controller);
+                    graderFrame.setTeacher(loggedInTeacher.getName(), loggedInTeacher.getSurname(), loggedInTeacher.getSubject());
+                    graderFrame.fillStudentsComboBox();
+                    graderFrame.fillGradesComboBox();
+                }
 
                 dispose();
             } else {
@@ -162,5 +174,31 @@ public class TeacherLoginFrame extends JFrame {
 
     public void setController(Controller controller) {
         this.controller = controller;
+    }
+
+    private void showSubjectSelectionPrompt(Teacher teacher) {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Select a subject:");
+        JComboBox<String> subjectComboBox = new JComboBox<>(controller.getSubjectsForTeacher(teacher).toArray(new String[0]));
+        panel.add(label);
+        panel.add(subjectComboBox);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, "Select Subject", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+
+            String selectedSubject = (String) subjectComboBox.getSelectedItem();
+
+            if (selectedSubject != null) {
+
+                JOptionPane.showMessageDialog(null, "Selected Subject: " + selectedSubject);
+                GraderFrame graderFrame = new GraderFrame();
+                graderFrame.setController(controller);
+                graderFrame.setTeacher(teacher.getName(), teacher.getSurname(), selectedSubject);
+                graderFrame.fillStudentsComboBox();
+                graderFrame.fillGradesComboBox();
+                System.out.println("Login successful");
+            }
+        }
     }
 }

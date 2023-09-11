@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class StudentReportFrame extends JFrame {
@@ -20,11 +19,7 @@ public class StudentReportFrame extends JFrame {
     private Student student;
     private JMenuBar menuBar;
     private JMenu menu;
-//    private JMenuItem sortAscendingOption;
-//    private JMenuItem sortDescendingOption;
-    private JMenuItem saveOption;
     private JMenuItem logoutOption;
-    private JMenuItem backOption;
     private TableRowSorter<DefaultTableModel> tableRowSorter;
 
     private Controller controller;
@@ -53,16 +48,8 @@ public class StudentReportFrame extends JFrame {
 
         menuBar = new JMenuBar();
         menu = new JMenu("Options");
-//        sortAscendingOption = new JMenuItem("Sort Ascending");
-//        sortDescendingOption = new JMenuItem("Sort Descending");
-        saveOption = new JMenuItem("Save");
         logoutOption = new JMenuItem("Logout");
-        backOption = new JMenuItem("Back");
         menuBar.add(menu);
-//        menu.add(sortAscendingOption);
-//        menu.add(sortDescendingOption);
-        menu.add(backOption);
-        menu.add(saveOption);
         menu.add(logoutOption);
     }
 
@@ -72,7 +59,7 @@ public class StudentReportFrame extends JFrame {
         table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make cells non-editable
+                return false;
             }
         };
 
@@ -113,42 +100,6 @@ public class StudentReportFrame extends JFrame {
                     "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         });
-
-        saveOption.addActionListener(e -> {
-            DBHandler dbHandler = new DBHandler();
-            dbHandler.setController(controller);
-            dbHandler.saveData();
-            JOptionPane.showMessageDialog(null, "Data saved successfully",
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        backOption.addActionListener(e -> {
-            ExamPickerFrame examPickerFrame = new ExamPickerFrame();
-            examPickerFrame.setController(controller);
-            examPickerFrame.setStudentNameLabel(student.getName(), student.getSurname());
-            examPickerFrame.setStudent(student);
-            dispose();
-        });
-
-//        sortAscendingOption.addActionListener(e -> {
-//            if (table.getRowCount() > 0) {
-//                sortDataAscending();
-//            } else {
-//                JOptionPane.showMessageDialog(null, "No data to sort.",
-//                        "Information", JOptionPane.INFORMATION_MESSAGE);
-//            }
-//        });
-
-//        sortDescendingOption.addActionListener(e -> {
-//            int selectedColumn = table.getSelectedColumn();
-//            if (table.getRowCount() > 0 && selectedColumn != -1) {
-//                sortDataDescending();
-//            } else {
-//                JOptionPane.showMessageDialog(null, "No data to sort.",
-//                        "Information", JOptionPane.INFORMATION_MESSAGE);
-//            }
-//        });
-
 
     }
 
@@ -231,15 +182,5 @@ public class StudentReportFrame extends JFrame {
     public void setController(Controller controller) {
         this.controller = controller;
     }
-
-//    public void sortDataAscending() {
-//        tableRowSorter.setComparator(0, Comparator.naturalOrder());
-//        tableRowSorter.sort();
-//    }
-//
-//    public void sortDataDescending() {
-//        tableRowSorter.setComparator(0, Comparator.reverseOrder());
-//        tableRowSorter.sort();
-//    }
 
 }

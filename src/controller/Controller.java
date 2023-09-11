@@ -30,60 +30,13 @@ public class Controller {
 
     // Student details manager
 
-    /**
-     * Adds a new student to the data repository.
-     *
-     * @param student The student to be added.
-     */
     public void addStudent(Student student) {
         studentDataRepository.addStudent(student);
     }
 
-    /**
-     * Removes the last added student from the data repository.
-     */
-    public void removeLastStudent() {
-        studentDataRepository.removeLastStudent();
-    }
-
-    /**
-     * Retrieves the last added student from the data repository.
-     *
-     * @return The last added student.
-     */
-    public Student getLastStudent() {
-        return studentDataRepository.getLastStudent();
-    }
-
-    /**
-     * Retrieves the student at the specified index from the data repository.
-     *
-     * @param index The index of the student to be retrieved.
-     * @return The student at the specified index.
-     */
-    public Student getStudentAtIndex(int index) {
-        return studentDataRepository.getStudentAtIndex(index);
-    }
-
-    /**
-     * Retrieves the list of students from the data repository.
-     *
-     * @return The list of students.
-     */
     public List<Student> getStudentList() {
         return studentDataRepository.getStudentData();
     }
-
-    // Exam details manager
-
-    public void addExamInfo(String exam_subject) {
-        examInfoRepository.addExamInfo(exam_subject);
-    }
-
-    public List<String> getExamInfo() {
-        return examInfoRepository.getExamInfo();
-    }
-
 
     // Teacher details manager
 
@@ -91,8 +44,28 @@ public class Controller {
         teacherDataRepository.addTeacher(teacher);
     }
 
-    public List<Teacher> getTeacherList() {
-        return teacherDataRepository.getTeacherList();
+    public List<String> getSubjectsForTeacher(Teacher teacher) {
+        return teacherDataRepository.getSubjectsForTeacher(teacher);
+    }
+
+    public void addSubjectToTeacher(Teacher teacher, String subject) {
+        teacherDataRepository.addSubjectToTeacher(teacher, subject);
+    }
+
+    public HashMap<Teacher, List<String>> getTeacherMap() {
+        return teacherDataRepository.getTeacherMap();
+    }
+
+    public void removeTeacher(Teacher teacher) {
+        teacherDataRepository.removeTeacher(teacher);
+    }
+
+    public void removeSubjectFromTeacher(Teacher teacher, String subject) {
+        teacherDataRepository.removeSubjectFromTeacher(teacher, subject);
+    }
+
+    public Teacher getTeacher(String name, String surname) {
+        return teacherDataRepository.getTeacher(name, surname);
     }
 
     // Student Evaluation manager
@@ -111,6 +84,14 @@ public class Controller {
 
     public boolean gradeExists(Student student, String subject, int grade) {
         return gradeEvaluationRepository.gradeExists(student, subject, grade);
+    }
+
+    public void editGrade(Student student, String subject, int grade) {
+        gradeEvaluationRepository.editGrade(student, subject, grade);
+    }
+
+    public Integer getGrade(Student student, String subject) {
+         return gradeEvaluationRepository.getGrade(student, subject);
     }
 
 }

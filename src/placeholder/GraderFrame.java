@@ -16,8 +16,9 @@ public class GraderFrame extends JFrame {
     private JTextArea textDisplay;
     private JMenuBar menuBar;
     private JMenu menu;
-    private JMenuItem logoutOption, registerGrade, removeGrade, showResults, clearDisplay;
+    private JMenuItem logoutOption, registerGrade, clearDisplay, changeSubject;
     private Controller controller;
+    private JButton minusButton, editButton;
 
     private String teacherName;
     private String teacherSurname;
@@ -44,18 +45,22 @@ public class GraderFrame extends JFrame {
         subjectLabel = new JLabel();
         textDisplay = new JTextArea();
 
+        minusButton = new JButton("-");
+        minusButton.setPreferredSize(new Dimension(50, 30));
+
+        editButton = new JButton("Edit");
+        editButton.setPreferredSize(new Dimension(80, 30));
+
         menuBar = new JMenuBar();
         menu = new JMenu("Options");
-        logoutOption = new JMenuItem("Logout");
-        registerGrade = new JMenuItem("Register Grade");
-        removeGrade = new JMenuItem("Remove Grade");
-        showResults = new JMenuItem("Show Results");
         clearDisplay = new JMenuItem("Clear Display");
+        registerGrade = new JMenuItem("Register Grade");
+        changeSubject = new JMenuItem("Change Subject");
+        logoutOption = new JMenuItem("Logout");
 
         menu.add(clearDisplay);
         menu.add(registerGrade);
-        menu.add(removeGrade);
-        menu.add(showResults);
+        menu.add(changeSubject);
         menu.add(logoutOption);
         menuBar.add(menu);
     }
@@ -63,40 +68,104 @@ public class GraderFrame extends JFrame {
     public void layoutSet() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Professor and Subject labels
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
         professorLabel.setFont(new Font("Arial", Font.BOLD, 16));
         subjectLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(professorLabel);
         headerPanel.add(subjectLabel);
-
         panel.add(headerPanel, BorderLayout.NORTH);
 
-        // Combo boxes and buttons
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         studentsComboBox.setPreferredSize(new Dimension(200, 30));
-        gradesComboBox.setPreferredSize(new Dimension(200, 30));
+        gradesComboBox.setPreferredSize(new Dimension(100, 30));
         centerPanel.add(new JLabel("Student:"));
         centerPanel.add(studentsComboBox);
         centerPanel.add(new JLabel("Grade:"));
         centerPanel.add(gradesComboBox);
-
+        centerPanel.add(minusButton);
+        centerPanel.add(editButton);
         panel.add(centerPanel, BorderLayout.CENTER);
 
         textDisplay.setEditable(false);
         textDisplay.setFont(new Font("Arial", Font.PLAIN, 14));
         textDisplay.setBorder(BorderFactory.createEtchedBorder());
         JScrollPane scrollPane = new JScrollPane(textDisplay);
-        scrollPane.setPreferredSize(new Dimension(300, 150));
+        scrollPane.setPreferredSize(new Dimension(300, 200));
         panel.add(scrollPane, BorderLayout.SOUTH);
 
         setJMenuBar(menuBar);
-
         add(panel);
     }
 
+
     public void activateComps() {
+
+        editButton.addActionListener(e -> {
+            String studentName = (String) studentsComboBox.getSelectedItem();
+            String subject = teacherSubject;
+            Integer currentGrade = controller.getGrade(findStudent(studentName), subject);
+
+            if (currentGrade == null) {
+                JOptionPane.showMessageDialog(null, "Grade is not registered for student "
+                                + studentName + "!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            if (studentName.equals("Select student") || currentGrade == null) {
+                textDisplay.append("Please select a student or register a grade first!\n");
+            } else {
+                String newGrade = JOptionPane.showInputDialog(this, "Edit grade for " +
+                        studentName + ":", currentGrade);
+
+                if (newGrade != null) {
+                    try {
+                        int gradeInt = Integer.parseInt(newGrade);
+                        Student student = findStudent(studentName);
+
+                        if (student == null) {
+                            JOptionPane.showMessageDialog(null, "Student not found!");
+                        } else if (gradeInt < 1 || gradeInt > 5) {
+                            JOptionPane.showMessageDialog(null, "Invalid grade. " +
+                                    "Please enter a grade between 1 and 5.");
+                        } else {
+                            controller.editGrade(student, subject, gradeInt);
+                            textDisplay.append("Edited grade for subject " + subject.toUpperCase()  + " into " + gradeInt +
+                                    " for student " + studentName + "!\n");
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid grade. Please enter a valid numeric grade.");
+                    }
+                }
+            }
+        });
+
+
+        minusButton.addActionListener(e -> {
+            String studentName = (String) studentsComboBox.getSelectedItem();
+            String subject = teacherSubject;
+            String grade = (String) gradesComboBox.getSelectedItem();
+
+            if (studentName.equals("Select student") || grade.equals("Select grade")) {
+                textDisplay.append("Please select a student and a grade!\n");
+            } else if (grade.equals("Select grade")) {
+                textDisplay.append("Please select a valid grade!\n");
+            } else {
+
+                int gradeInt = Integer.parseInt(grade);
+                Student student = findStudent(studentName);
+
+                if (student == null) {
+                    JOptionPane.showMessageDialog(null, "Student not found!");
+                } else if (!controller.gradeExists(student, subject, gradeInt)) {
+                    JOptionPane.showMessageDialog(null, "Grade " + grade + " is not registered for student "
+                            + studentName + "!");
+                } else {
+                    controller.removeGrade(student, subject);
+                    textDisplay.append("Removed grade " + gradeInt + " for subject " + subject.toUpperCase() + " from student " + studentName + "!\n");
+                }
+            }
+        });
+
         logoutOption.addActionListener(e -> {
             TeacherLoginFrame teacherLoginFrame = new TeacherLoginFrame();
             teacherLoginFrame.setController(controller);
@@ -131,58 +200,43 @@ public class GraderFrame extends JFrame {
             }
         });
 
-        removeGrade.addActionListener(e -> {
-            String studentName = (String) studentsComboBox.getSelectedItem();
-            String subject = teacherSubject;
-            String grade = (String) gradesComboBox.getSelectedItem();
-
-            if (studentName.equals("Select student") || grade.equals("Select grade")) {
-                textDisplay.append("Please select a student and a grade!\n");
-            } else if (grade.equals("Select grade")) {
-                textDisplay.append("Please select a valid grade!\n");
-            } else {
-
-                int gradeInt = Integer.parseInt(grade);
-                Student student = findStudent(studentName);
-
-                if (student == null) {
-                    JOptionPane.showMessageDialog(null, "Student not found!");
-                } else if (!controller.gradeExists(student, subject, gradeInt)) {
-                    JOptionPane.showMessageDialog(null, "Grade " + grade + " is not registered for student "
-                            + studentName + "!");
-                } else {
-                    controller.removeGrade(student, subject);
-                    textDisplay.append("Removed grade for subject " + subject.toUpperCase() + " from student " + studentName + "!\n");
-                }
-            }
-        });
-
-
-
-
-        showResults.addActionListener(e -> {
-            HashMap<Student, HashMap<String, Integer>> gradeData = controller.getGradeData();
-
-            if (gradeData.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No grades registered!");
-            } else {
-                System.out.println("Info:\n");
-                for (Student student : gradeData.keySet()) {
-                    HashMap<String, Integer> studentGrades = gradeData.get(student);
-
-                    if (studentGrades != null) {
-                        for (String subject : studentGrades.keySet()) {
-                            int grade = studentGrades.get(subject);
-                            System.out.println(student.getName() + " " + student.getSurname() + " " + subject + " " + grade + "\n");
-                        }
-                    }
-                }
-            }
-        });
-
         clearDisplay.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Display cleared!");
             textDisplay.setText("");
+        });
+
+        changeSubject.addActionListener(e -> {
+
+            Teacher teacher = controller.getTeacher(teacherName, teacherSurname);
+
+            if (teacher != null) {
+                List<String> subjects = controller.getSubjectsForTeacher(teacher);
+
+                if (subjects.size() > 1) {
+                    JPanel panel = new JPanel();
+                    JLabel label = new JLabel("Select a subject:");
+                    JComboBox<String> subjectComboBox = new JComboBox<>(subjects.toArray(new String[0]));
+                    panel.add(label);
+                    panel.add(subjectComboBox);
+
+                    int result = JOptionPane.showConfirmDialog(this, panel, "Select Subject", JOptionPane.OK_CANCEL_OPTION);
+
+                    if (result == JOptionPane.OK_OPTION) {
+
+                        String selectedSubject = (String) subjectComboBox.getSelectedItem();
+
+                        if (selectedSubject != null) {
+                            this.teacherSubject = selectedSubject;
+                            subjectLabel.setText(selectedSubject.toUpperCase());
+                            fillStudentsComboBox();
+                        }
+                    }
+                } else {
+                    changeSubject.setEnabled(false);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Teacher not found!");
+            }
         });
     }
 
@@ -191,11 +245,11 @@ public class GraderFrame extends JFrame {
 
         if (gradeData.isEmpty()) {
             registerGrade.setEnabled(false);
-            removeGrade.setEnabled(false);
+            minusButton.setEnabled(false);
             studentsComboBox.addItem("No students registered");
         } else {
             registerGrade.setEnabled(true);
-            removeGrade.setEnabled(true);
+            minusButton.setEnabled(true);
         }
 
         String teacherSubjectLowerCase = teacherSubject.toLowerCase();

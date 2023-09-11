@@ -1,8 +1,11 @@
-package placeholder;
+package Application;
 
 import Database.ExamInfoRepository;
 import Database.StudentDataRepository;
 import controller.Controller;
+import placeholder.ClientFrame;
+import placeholder.GradeEvaluationRepository;
+import placeholder.TeacherDataRepository;
 
 import javax.swing.*;
 

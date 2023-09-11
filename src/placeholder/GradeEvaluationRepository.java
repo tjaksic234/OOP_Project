@@ -43,4 +43,25 @@ public class GradeEvaluationRepository {
 
         return studentGrades != null && studentGrades.containsKey(subject) && studentGrades.get(subject) == grade;
     }
+
+    public void editGrade(Student student, String subject, int grade) {
+        HashMap<String, Integer> studentGrades = gradeData.get(student);
+
+        if (studentGrades != null) {
+            studentGrades.replace(subject, grade);
+        }
+    }
+
+    public Integer getGrade(Student student, String subject) {
+        HashMap<String, Integer> studentGrades = gradeData.get(student);
+
+        if (studentGrades != null && studentGrades.containsKey(subject)) {
+            Integer grade = studentGrades.get(subject);
+            if (grade != null && grade != 0) {
+                return grade;
+            }
+        }
+        return null;
+
+    }
 }
