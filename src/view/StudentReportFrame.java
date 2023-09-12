@@ -1,7 +1,6 @@
-package placeholder;
+package view;
 
 import controller.Controller;
-import model.DBHandler;
 import model.Student;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package placeholder;
+package view;
 
 import controller.Controller;
 

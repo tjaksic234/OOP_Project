@@ -1,4 +1,4 @@
-package placeholder;
+package model;
 
 public class Teacher {
 

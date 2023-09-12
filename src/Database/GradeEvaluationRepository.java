@@ -1,4 +1,4 @@
-package placeholder;
+package Database;
 
 import model.Student;
 

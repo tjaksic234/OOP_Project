@@ -1,4 +1,6 @@
-package placeholder;
+package Database;
+
+import model.Teacher;
 
 import java.util.ArrayList;
 import java.util.HashMap;

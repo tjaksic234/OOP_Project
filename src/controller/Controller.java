@@ -1,11 +1,10 @@
 package controller;
 
-import Database.ExamInfoRepository;
 import Database.StudentDataRepository;
 import model.Student;
-import placeholder.GradeEvaluationRepository;
-import placeholder.Teacher;
-import placeholder.TeacherDataRepository;
+import Database.GradeEvaluationRepository;
+import model.Teacher;
+import Database.TeacherDataRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,17 +13,14 @@ import java.util.List;
 public class Controller {
     private StudentDataRepository studentDataRepository;
     private TeacherDataRepository teacherDataRepository;
-    private ExamInfoRepository examInfoRepository;
     private GradeEvaluationRepository gradeEvaluationRepository;
 
 
     public Controller(StudentDataRepository studentDataRepository, TeacherDataRepository teacherDataRepository,
-                      ExamInfoRepository examInfoRepository,
                       GradeEvaluationRepository gradeEvaluationRepository) {
 
         this.studentDataRepository = studentDataRepository;
         this.teacherDataRepository = teacherDataRepository;
-        this.examInfoRepository = examInfoRepository;
         this.gradeEvaluationRepository = gradeEvaluationRepository;
     }
 
@@ -91,7 +87,7 @@ public class Controller {
     }
 
     public Integer getGrade(Student student, String subject) {
-         return gradeEvaluationRepository.getGrade(student, subject);
+        return gradeEvaluationRepository.getGrade(student, subject);
     }
 
 }

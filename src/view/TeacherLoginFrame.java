@@ -1,10 +1,10 @@
-package placeholder;
+package view;
 
 import controller.Controller;
+import model.Teacher;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -154,6 +154,11 @@ public class TeacherLoginFrame extends JFrame {
             if (loginSuccessful) {
                 if (teacherProfessionSize > 1) {
                     showSubjectSelectionPrompt(loggedInTeacher);
+
+                } else if (teacherProfessionSize == 0) {
+                    JOptionPane.showMessageDialog(null, "Teacher " + loggedInTeacher.getName() + " "
+                                    + loggedInTeacher.getSurname() + " has no subjects assigned to him/her.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Login successful");
                     GraderFrame graderFrame = new GraderFrame();
@@ -161,9 +166,8 @@ public class TeacherLoginFrame extends JFrame {
                     graderFrame.setTeacher(loggedInTeacher.getName(), loggedInTeacher.getSurname(), loggedInTeacher.getSubject());
                     graderFrame.fillStudentsComboBox();
                     graderFrame.fillGradesComboBox();
+                    dispose();
                 }
-
-                dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid username or password!!!");
                 usernameField.setText("");
@@ -198,6 +202,7 @@ public class TeacherLoginFrame extends JFrame {
                 graderFrame.fillStudentsComboBox();
                 graderFrame.fillGradesComboBox();
                 System.out.println("Login successful");
+                dispose();
             }
         }
     }

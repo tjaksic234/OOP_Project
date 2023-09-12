@@ -1,7 +1,10 @@
-package placeholder;
+package view;
 
 import controller.Controller;
+import model.CompletedExamsDialog;
+import model.ExamsInProgressDialog;
 import model.Student;
+import model.Teacher;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +19,7 @@ public class GraderFrame extends JFrame {
     private JTextArea textDisplay;
     private JMenuBar menuBar;
     private JMenu menu;
-    private JMenuItem logoutOption, registerGrade, clearDisplay, changeSubject;
+    private JMenuItem logoutOption, registerGrade, clearDisplay, changeSubject, examsInProgress, completedExams;
     private Controller controller;
     private JButton minusButton, editButton;
 
@@ -56,11 +59,15 @@ public class GraderFrame extends JFrame {
         clearDisplay = new JMenuItem("Clear Display");
         registerGrade = new JMenuItem("Register Grade");
         changeSubject = new JMenuItem("Change Subject");
+        examsInProgress = new JMenuItem("Exams in Progress");
+        completedExams = new JMenuItem("Completed Exams");
         logoutOption = new JMenuItem("Logout");
 
         menu.add(clearDisplay);
         menu.add(registerGrade);
         menu.add(changeSubject);
+        menu.add(examsInProgress);
+        menu.add(completedExams);
         menu.add(logoutOption);
         menuBar.add(menu);
     }
@@ -108,7 +115,7 @@ public class GraderFrame extends JFrame {
 
             if (currentGrade == null) {
                 JOptionPane.showMessageDialog(null, "Grade is not registered for student "
-                                + studentName + "!", "Error", JOptionPane.ERROR_MESSAGE);
+                        + studentName + "!", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
             if (studentName.equals("Select student") || currentGrade == null) {
@@ -138,7 +145,6 @@ public class GraderFrame extends JFrame {
                 }
             }
         });
-
 
         minusButton.addActionListener(e -> {
             String studentName = (String) studentsComboBox.getSelectedItem();
@@ -237,6 +243,24 @@ public class GraderFrame extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Teacher not found!");
             }
+        });
+
+        examsInProgress.addActionListener(e -> {
+
+            ExamsInProgressDialog examsDialog = new ExamsInProgressDialog(this);
+            examsDialog.setController(controller);
+            examsDialog.setTeacher(teacherName, teacherSurname);
+            examsDialog.fillTable();
+            examsDialog.setVisible(true);
+        });
+
+        completedExams.addActionListener(e -> {
+
+            CompletedExamsDialog completedExamsDialog = new CompletedExamsDialog(this);
+            completedExamsDialog.setController(controller);
+            completedExamsDialog.setTeacher(teacherName, teacherSurname);
+            completedExamsDialog.fillTable();
+            completedExamsDialog.setVisible(true);
         });
     }
 

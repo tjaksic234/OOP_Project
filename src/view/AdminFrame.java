@@ -1,7 +1,8 @@
-package placeholder;
+package view;
 
 import controller.Controller;
 import model.Student;
+import model.Teacher;
 
 import javax.swing.*;
 import java.awt.*;
@@ -467,7 +468,7 @@ public class AdminFrame extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String selectedTeacherName = (String) teacherComboBox.getSelectedItem();
-                        String profession = professionField.getText();
+                        String profession = professionField.getText().toUpperCase();
 
                         if (selectedTeacherName.isEmpty() || profession.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Please select a teacher and enter a profession.",
@@ -483,11 +484,12 @@ public class AdminFrame extends JFrame {
 
                             if (selectedTeacher != null) {
                                 if (teachers.get(selectedTeacher).contains(profession)) {
-                                    controller.removeSubjectFromTeacher(selectedTeacher, profession);
+                                    controller.removeSubjectFromTeacher(selectedTeacher, profession.toUpperCase());
                                     JOptionPane.showMessageDialog(null, "Profession removed successfully.",
                                             "Success", JOptionPane.INFORMATION_MESSAGE);
                                     System.out.println("Removed profession: " + profession + " from teacher: " +
                                             selectedTeacher.getName() + " " + selectedTeacher.getSurname());
+                                    System.out.println(controller.getSubjectsForTeacher(selectedTeacher));
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Profession has already been removed.",
                                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -564,5 +566,3 @@ public class AdminFrame extends JFrame {
 
 
 }
-
-
