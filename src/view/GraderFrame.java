@@ -60,7 +60,7 @@ public class GraderFrame extends JFrame {
         registerGrade = new JMenuItem("Register Grade");
         changeSubject = new JMenuItem("Change Subject");
         examsInProgress = new JMenuItem("Exams in Progress");
-        completedExams = new JMenuItem("Completed Exams");
+        completedExams = new JMenuItem("Graded Exams");
         logoutOption = new JMenuItem("Logout");
 
         menu.add(clearDisplay);
@@ -149,25 +149,23 @@ public class GraderFrame extends JFrame {
         minusButton.addActionListener(e -> {
             String studentName = (String) studentsComboBox.getSelectedItem();
             String subject = teacherSubject;
-            String grade = (String) gradesComboBox.getSelectedItem();
 
-            if (studentName.equals("Select student") || grade.equals("Select grade")) {
-                textDisplay.append("Please select a student and a grade!\n");
-            } else if (grade.equals("Select grade")) {
-                textDisplay.append("Please select a valid grade!\n");
+            if (studentName.equals("Select student")) {
+                textDisplay.append("Please select a student!\n");
             } else {
-
-                int gradeInt = Integer.parseInt(grade);
                 Student student = findStudent(studentName);
 
                 if (student == null) {
                     JOptionPane.showMessageDialog(null, "Student not found!");
-                } else if (!controller.gradeExists(student, subject, gradeInt)) {
-                    JOptionPane.showMessageDialog(null, "Grade " + grade + " is not registered for student "
-                            + studentName + "!");
                 } else {
-                    controller.removeGrade(student, subject);
-                    textDisplay.append("Removed grade " + gradeInt + " for subject " + subject.toUpperCase() + " from student " + studentName + "!\n");
+                    int gradeFromDatabase = controller.getGradeForSubject(student, subject);
+
+                    if (gradeFromDatabase == -1) {
+                        JOptionPane.showMessageDialog(null, "Grade for subject " + subject.toUpperCase() + " not found for student " + studentName + "!");
+                    } else {
+                        controller.removeGrade(student, subject);
+                        textDisplay.append("Removed grade " + gradeFromDatabase + " for subject " + subject.toUpperCase() + " from student " + studentName + "!\n");
+                    }
                 }
             }
         });

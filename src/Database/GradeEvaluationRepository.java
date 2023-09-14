@@ -34,7 +34,7 @@ public class GradeEvaluationRepository {
         HashMap<String, Integer> studentGrades = gradeData.get(student);
 
         if (studentGrades != null) {
-            studentGrades.remove(subject);
+            studentGrades.put(subject, 0);
         }
     }
 
@@ -62,6 +62,24 @@ public class GradeEvaluationRepository {
             }
         }
         return null;
-
     }
+
+    public void setGradeData(HashMap<Student, HashMap<String, Integer>> gradeData) {
+        this.gradeData = gradeData;
+    }
+
+    public int getGradeForSubject(Student student, String subject) {
+        HashMap<String, Integer> studentGrades = gradeData.get(student);
+
+        if (studentGrades != null && studentGrades.containsKey(subject)) {
+            Integer grade = studentGrades.get(subject);
+
+            if (grade != null && grade != 0) {
+                return grade;
+            }
+        }
+
+        return -1;
+    }
+
 }

@@ -90,4 +90,12 @@ public class Controller {
         return gradeEvaluationRepository.getGrade(student, subject);
     }
 
+    public void setGradeData(HashMap<Student, HashMap<String, Integer>> gradeData) {
+        gradeEvaluationRepository.setGradeData(gradeData);
+    }
+
+    public Integer getGradeForSubject(Student student, String subject) {
+        return gradeEvaluationRepository.getGradeForSubject(student, subject);
+    }
+
 }

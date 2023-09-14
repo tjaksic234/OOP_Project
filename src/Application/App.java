@@ -8,7 +8,7 @@ import Database.TeacherDataRepository;
 
 import javax.swing.*;
 
-public class adminTest {
+public class App {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Controller controller = new Controller(new StudentDataRepository(), new TeacherDataRepository(),

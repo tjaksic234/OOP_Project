@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,7 +19,7 @@ public class StudentReportFrame extends JFrame {
     private Student student;
     private JMenuBar menuBar;
     private JMenu menu;
-    private JMenuItem logoutOption;
+    private JMenuItem logoutOption, saveDataOption, readDataOption;
     private TableRowSorter<DefaultTableModel> tableRowSorter;
 
     private Controller controller;
@@ -47,9 +48,13 @@ public class StudentReportFrame extends JFrame {
 
         menuBar = new JMenuBar();
         menu = new JMenu("Options");
+        saveDataOption = new JMenuItem("Save data");
+        readDataOption = new JMenuItem("Read data");
         logoutOption = new JMenuItem("Logout");
-        menuBar.add(menu);
+        menu.add(saveDataOption);
+        menu.add(readDataOption);
         menu.add(logoutOption);
+        menuBar.add(menu);
     }
 
     public void layoutSet() {
@@ -100,6 +105,24 @@ public class StudentReportFrame extends JFrame {
             dispose();
         });
 
+        saveDataOption.addActionListener(e -> {
+            saveData();
+        });
+
+        readDataOption.addActionListener(e -> {
+            HashMap<Student, HashMap<String, Integer>> data = readData();
+            if (data != null) {
+                controller.setGradeData(data);
+                setTableData();
+                setAverageGrade();
+                JOptionPane.showMessageDialog(null, "Data read successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No data available", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
+
     }
 
     public void setAverageGrade() {
@@ -120,10 +143,15 @@ public class StudentReportFrame extends JFrame {
 
                 if (!grades.isEmpty()) {
                     int sum = 0;
+                    int zero_count = 0;
                     for (Integer grade : grades) {
-                        sum += grade;
+                        if (grade != 0) {
+                            sum += grade;
+                        } else {
+                            zero_count++;
+                        }
                     }
-                    double average = (double) sum / grades.size();
+                    double average = (double) sum / (grades.size() - zero_count);
                     averageGradeTextField.setText(String.valueOf(average));
                 } else {
                     averageGradeTextField.setText("No grades are documented");
@@ -180,6 +208,42 @@ public class StudentReportFrame extends JFrame {
 
     public void setController(Controller controller) {
         this.controller = controller;
+    }
+
+    public void saveData() {
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        HashMap<Student, HashMap<String, Integer>> dataToSave = new HashMap<>();
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String subject = (String) tableModel.getValueAt(i, 0);
+            String condition = (String) tableModel.getValueAt(i, 1);
+            Integer grade = (Integer) tableModel.getValueAt(i, 2);
+
+            Student student = this.student;
+
+            dataToSave.computeIfAbsent(student, k -> new HashMap<>()).put(subject, grade);
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Projekt/src/Storage/StudentData.bin"))) {
+            oos.writeObject(dataToSave);
+            JOptionPane.showMessageDialog(null, "Data saved successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error saving data", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public HashMap<Student, HashMap<String, Integer>> readData() {
+        HashMap<Student, HashMap<String, Integer>> data = null;
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Projekt/src/Storage/StudentData.bin"))) {
+            data = (HashMap<Student, HashMap<String, Integer>>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error reading data", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return data;
     }
 
 }
